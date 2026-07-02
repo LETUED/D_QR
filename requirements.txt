@@ -7,3 +7,5 @@ opencv-python>=4.10        # QR 판독 (cv2.QRCodeDetector)
 ppf.datamatrix>=0.2        # DataMatrix 생성 (pure python)
 pylibdmtx>=0.1.10          # DataMatrix 판독 (Windows 휠에 libdmtx DLL 포함)
 setuptools>=70             # pylibdmtx가 distutils 임포트 (Python 3.12+ 필수 shim)
+reedsolo>=1.7.0
+Pillow>=10.0.0
