@@ -1,0 +1,13 @@
+[테스트 ①] 깨끗한 이미지 — coarse + fine 동시 복호
+  격자           : r=12 (coarse 230셀 / fine 218셀)
+  용량           : coarse 96B (ECC 30%) / fine 225B (ECC 20%)
+  coarse         : PASS (mode=hard)
+  fine           : PASS (mode=hard, conf=0.992)
+  이미지         : outputs/exp10/exp10_roundtrip_clean.png (1619x1441)
+
+[테스트 ②] GaussianBlur 7.5px — 점진적 공개(우아한 강등)
+  coarse         : PASS (원본 일치) (mode=hard)
+  fine           : PASS (None 강등) (conf=0.090)
+  이미지         : outputs/exp10/exp10_roundtrip_blur7.5.png
+
+=== exp10 전체 왕복 테스트 PASS ===

@@ -1,0 +1,82 @@
+
+=== 프로파일 A / patches ===
+  [A/patches] lv=20: margin 100%  vote 100%  v11b 100%
+  [A/patches] lv=30: margin 100%  vote 100%  v11b 100%
+  [A/patches] lv=40: margin 100%  vote 100%  v11b 100%
+  [A/patches] lv=50: margin 100%  vote 100%  v11b 100%
+  [A/patches] lv=60: margin 100%  vote 100%  v11b 100%
+  [A/patches] lv=70: margin 100%  vote 96%(W1)  v11b 96%
+  [A/patches] lv=80: margin 98%(W1)  vote 84%(W3)  v11b 84%
+  [A/patches] lv=90: margin 92%(W1)  vote 64%(W8)  v11b 64%
+  부분 저장: outputs\exp11b\partial\patches_A.json
+  소요 89s
+
+=== 프로파일 B / patches ===
+  [B/patches] lv=20: margin 100%  vote 100%  v11b 100%
+  [B/patches] lv=30: margin 100%  vote 88%(W1)  v11b 88%
+  [B/patches] lv=40: margin 92%(W2)  vote 64%(W3)  v11b 62%(W1)
+  [B/patches] lv=50: margin 76%(W6)  vote 30%(W12)  v11b 32%
+  [B/patches] lv=60: margin 50%(W8)  vote 10%(W17)  v11b 10%(W1)
+  [B/patches] lv=70: margin 32%(W10)  vote 6%(W13)  v11b 8%
+  [B/patches] lv=80: margin 16%(W9)  vote 0%(W12)  v11b 0%(W2)
+  [B/patches] lv=90: margin 6%(W15)  vote 0%(W12)  v11b 0%
+  부분 저장: outputs\exp11b\partial\patches_B.json
+  소요 164s
+
+=== 프로파일 A / noise ===
+  [A/noise] lv=100: margin 100%  vote 100%  v11b 100%
+  [A/noise] lv=105: margin 100%  vote 100%  v11b 100%
+  [A/noise] lv=110: margin 98%  vote 100%  v11b 100%
+  [A/noise] lv=115: margin 90%(W3)  vote 100%  v11b 100%
+  [A/noise] lv=120: margin 62%(W7)  vote 100%  v11b 100%
+  [A/noise] lv=125: margin 18%(W9)  vote 100%  v11b 100%
+  [A/noise] lv=130: margin 4%(W12)  vote 100%  v11b 100%
+  [A/noise] lv=135: margin 0%(W15)  vote 100%  v11b 100%
+  부분 저장: outputs\exp11b\partial\noise_A.json
+  소요 125s
+
+=== 프로파일 B / noise ===
+  [B/noise] lv=100: margin 100%  vote 100%  v11b 100%
+  [B/noise] lv=105: margin 96%(W1)  vote 100%  v11b 100%
+  [B/noise] lv=110: margin 76%(W3)  vote 100%  v11b 100%
+  [B/noise] lv=115: margin 30%(W13)  vote 100%  v11b 100%
+  [B/noise] lv=120: margin 8%(W15)  vote 100%  v11b 100%
+  [B/noise] lv=125: margin 0%(W19)  vote 100%  v11b 100%
+  [B/noise] lv=130: margin 0%(W14)  vote 100%  v11b 100%
+  [B/noise] lv=135: margin 0%(W13)  vote 100%  v11b 100%
+  부분 저장: outputs\exp11b\partial\noise_B.json
+  소요 69s
+
+=== 프로파일 A / blur ===
+  [A/blur] lv=6.0: margin 100%  vote 100%  v11b 100%
+  [A/blur] lv=6.5: margin 100%  vote 100%  v11b 100%
+  [A/blur] lv=7.0: margin 100%  vote 100%  v11b 100%
+  [A/blur] lv=7.5: margin 100%  vote 100%  v11b 100%
+  [A/blur] lv=8.0: margin 100%  vote 100%  v11b 100%
+  [A/blur] lv=8.5: margin 100%  vote 100%  v11b 100%
+  [A/blur] lv=9.0: margin 100%  vote 100%  v11b 100%
+  [A/blur] lv=9.5: margin 100%  vote 0%  v11b 100%
+  부분 저장: outputs\exp11b\partial\blur_A.json
+  소요 92s
+
+=== 코드워드 스트레스 시뮬 ===
+  1000/10000 (62s) legacy:w=20 defended:w=7 v11b:w=0 strict_s2:w=0
+  2000/10000 (124s) legacy:w=46 defended:w=18 v11b:w=0 strict_s2:w=0
+  3000/10000 (184s) legacy:w=77 defended:w=25 v11b:w=0 strict_s2:w=0
+  4000/10000 (248s) legacy:w=102 defended:w=35 v11b:w=0 strict_s2:w=0
+  5000/10000 (315s) legacy:w=120 defended:w=42 v11b:w=0 strict_s2:w=0
+  6000/10000 (383s) legacy:w=146 defended:w=51 v11b:w=0 strict_s2:w=0
+  7000/10000 (449s) legacy:w=160 defended:w=59 v11b:w=0 strict_s2:w=0
+  8000/10000 (515s) legacy:w=190 defended:w=67 v11b:w=0 strict_s2:w=0
+  9000/10000 (576s) legacy:w=213 defended:w=76 v11b:w=0 strict_s2:w=0
+  10000/10000 (636s) legacy:w=237 defended:w=84 v11b:w=0 strict_s2:w=0
+  코드워드 시뮬 저장: outputs\exp11b\codeword_sim.json
+차트 저장: outputs\exp11b\exp11b_ablation_chart.png
+보고서 저장: outputs\exp11b\exp11b_ablation_report.md
+요약 저장: outputs\exp11b\exp11b_ablation_summary.json
+
+=== 목표 판정 ===
+  patch: FAIL  {'pass': False, 'max_loss_pp': {'A': 28.0, 'B': 44.0}}
+  noise: PASS  {'pass': True, 's135_rate': {'A': 100.0, 'B': 100.0}}
+  blur: PASS  {'pass': True, 'loss_at_9_5_pp': 0.0, 'margin_9_5': 100.0, 'v11b_9_5': 100.0}
+  codeword: PASS  {'pass': True, 'defended_wrong': 84, 'v11b_wrong': 0}

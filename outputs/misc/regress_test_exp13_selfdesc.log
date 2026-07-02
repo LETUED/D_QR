@@ -1,0 +1,32 @@
+[테스트 ①] r= 8: PASS (구배치 회전모호=True, 거울모호=True, 차등 파인더 유일판별=True, 일치 가설=[(0, False)])
+[테스트 ①] r=12: PASS (구배치 회전모호=True, 거울모호=True, 차등 파인더 유일판별=True, 일치 가설=[(0, False)])
+[테스트 ①] r=18: PASS (구배치 회전모호=True, 거울모호=True, 차등 파인더 유일판별=True, 일치 가설=[(0, False)])
+[테스트 ②] 포맷 셀 배치 (전 GRID_RADII): PASS
+[테스트 ②] 포맷 워드 pack/parse 왕복: PASS
+[테스트 ②] 1사본 전파괴 다수결 복원: PASS
+[테스트 ③] 기하 자기추정 A: PASS (후보 1개, r=12, hs=31.9818, Δox=0.459px)
+[테스트 ③] 기하 자기추정 B: PASS (후보 1개, r=8, hs=31.9860, Δox=0.256px)
+[테스트 ④] 방향 유일성 rot0       : PASS (가설=[(0, False)])
+[테스트 ④] 방향 유일성 rot120     : PASS (가설=[(2, False)])
+[테스트 ④] 방향 유일성 rot240     : PASS (가설=[(1, False)])
+[테스트 ④] 방향 유일성 mirror     : PASS (가설=[(0, True)])
+[테스트 ④] 방향 유일성 mirror+120 : PASS (가설=[(2, True)])
+[테스트 ④] 방향 유일성 mirror+240 : PASS (가설=[(1, True)])
+[테스트 ④] 6가설 전수 커버: PASS ([(0, False), (2, False), (1, False), (0, True), (2, True), (1, True)])
+[테스트 ⑤] 왕복 A rot  0: PASS (mode=hard, orient={'rot_k': 0, 'mirrored': False})
+[테스트 ⑤] 왕복 A rot120: PASS (mode=hard, orient={'rot_k': 2, 'mirrored': False})
+[테스트 ⑤] 왕복 A rot240: PASS (mode=hard, orient={'rot_k': 1, 'mirrored': False})
+[테스트 ⑤] 왕복 B rot  0: PASS (mode=hard, orient={'rot_k': 0, 'mirrored': False})
+[테스트 ⑤] 왕복 B rot120: PASS (mode=hard, orient={'rot_k': 2, 'mirrored': False})
+[테스트 ⑤] 왕복 B rot240: PASS (mode=hard, orient={'rot_k': 1, 'mirrored': False})
+[테스트 ⑤] 자기기술 왕복 합계: 6/6 (PASS)
+[테스트 ⑥] 거울상 A mirror        : PASS
+[테스트 ⑥] 거울상 A mirror_rot120 : PASS
+[테스트 ⑥] 거울상 B mirror        : PASS
+[테스트 ⑥] 거울상 B mirror_rot120 : PASS
+[테스트 ⑦] CLI 통합: PASS (인코딩=True, 메타 부재=True, 디코딩=True)
+[테스트 ⑧] 회귀 test_exp9_roundtrip.py    : PASS
+[테스트 ⑧] 회귀 test_exp11_roundtrip.py   : PASS
+[테스트 ⑨] 군집 블롯 A 360px: PASS (스윕 복구=True, mode sweep=True, 합의 3건, 스윕 비활성=fail)
+
+=== exp13 전체 테스트 PASS ===

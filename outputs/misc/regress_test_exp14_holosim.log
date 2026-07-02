@@ -1,0 +1,17 @@
+[테스트 ①] zoom_about_center 기하
+  항등=True  확대 이동=True  축소 이동=True → PASS
+[테스트 ②] speckle_field 통계
+  C=0.1: 평균=1.000 실측C=0.100 비음수=True
+  C=0.3: 평균=1.000 실측C=0.300 비음수=True
+  C=0.5: 평균=1.000 실측C=0.500 비음수=True
+  → PASS
+[테스트 ③] 이진 위상 양자화
+  위상 고유값: [0.         3.14159265] → PASS
+[테스트 ④] 코히어런트 532nm 재생 왕복 (합격선 a)
+  coarse=PASS(hard)  fine=PASS(hard, conf=0.857)
+[테스트 ⑤] 백색 LED κ=0 (이미지면) — coarse 생존
+  coarse=PASS
+[테스트 ⑥] 대조군 유틸 — 비트 정확도 측정기
+  자기 렌더 정확도=1.000 (기대 1.0)  타 채널 텐서=0.497 (기대 ~0.5) → PASS
+
+=== exp14 전체 테스트 PASS ===

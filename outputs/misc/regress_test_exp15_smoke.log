@@ -1,0 +1,17 @@
+[테스트 ①] 가용성: PASS (심볼로지 ['qr', 'dm', 'dqr'])
+    qrcode: ok
+    opencv (cv2): ok
+    ppf.datamatrix: ok
+    pylibdmtx: ok
+[테스트 ②] 왕복 QR ECC-H          : PASS (QR v7 ECC-H)
+[테스트 ②] 왕복 DataMatrix ECC200 : PASS (DataMatrix 40x40 ECC200)
+[테스트 ②] 왕복 D_QR A+v11b       : PASS (D_QR 프로파일 A (radius 8, 6bit/셀) + v11b)
+[테스트 ③] 캔버스 QR ECC-H          : PASS (size=(800, 800))
+[테스트 ③] 캔버스 DataMatrix ECC200 : PASS (size=(800, 800))
+[테스트 ③] 캔버스 D_QR A+v11b       : PASS (size=(800, 800))
+[테스트 ④] 채널 scatter : PASS
+[테스트 ④] 채널 blot    : PASS
+[테스트 ④] 채널 noise   : PASS
+[테스트 ④] 채널 blur    : PASS
+
+=== exp15 스모크 테스트 PASS ===

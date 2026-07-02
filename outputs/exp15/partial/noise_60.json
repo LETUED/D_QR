@@ -1,0 +1,1 @@
+{"trials": 100, "counts": {"qr": {"ok": 96, "wrong": 0, "fail": 4}, "dm": {"ok": 8, "wrong": 0, "fail": 92}, "dqr": {"ok": 100, "wrong": 0, "fail": 0}}}

@@ -1,0 +1,421 @@
+{
+  "payload_bytes": 59,
+  "trials_per_condition": 100,
+  "seed": 42,
+  "availability": {
+    "qrcode": "ok",
+    "opencv (cv2)": "ok",
+    "ppf.datamatrix": "ok",
+    "pylibdmtx": "ok"
+  },
+  "meta": {
+    "qr": {
+      "symbology": "QR v7 ECC-H",
+      "modules": 45,
+      "native_px": 530,
+      "feature_px": 12.1,
+      "total_codewords": 196,
+      "data_codewords": 66,
+      "ecc_share": 66.3,
+      "reader": "cv2.QRCodeDetector"
+    },
+    "dm": {
+      "symbology": "DataMatrix 40x40 ECC200",
+      "modules": 40,
+      "native_px": 420,
+      "feature_px": 15.2,
+      "total_codewords": 162,
+      "ecc_codewords": 48,
+      "ecc_share": 29.6,
+      "reader": "pylibdmtx (timeout 1500ms)"
+    },
+    "dqr": {
+      "symbology": "D_QR 프로파일 A (radius 8, 6bit/셀) + v11b",
+      "native_px": 1176,
+      "feature_px": 18.4,
+      "total_codewords": 135,
+      "ecc_codewords": 76,
+      "ecc_share": 56.3,
+      "reader": "DQRDecoderV11B (기하 파라미터 제공)"
+    }
+  },
+  "totals": {
+    "qr": {
+      "ok": 646,
+      "wrong": 0,
+      "fail": 1154
+    },
+    "dm": {
+      "ok": 416,
+      "wrong": 0,
+      "fail": 1384
+    },
+    "dqr": {
+      "ok": 1014,
+      "wrong": 7,
+      "fail": 779
+    }
+  },
+  "conditions": {
+    "scatter/20": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 4,
+          "wrong": 0,
+          "fail": 96
+        },
+        "dm": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dqr": {
+          "ok": 95,
+          "wrong": 0,
+          "fail": 5
+        }
+      }
+    },
+    "scatter/40": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dm": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dqr": {
+          "ok": 18,
+          "wrong": 0,
+          "fail": 82
+        }
+      }
+    },
+    "scatter/60": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dm": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dqr": {
+          "ok": 1,
+          "wrong": 0,
+          "fail": 99
+        }
+      }
+    },
+    "scatter/90": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dm": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dqr": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        }
+      }
+    },
+    "blot/1": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 30,
+          "wrong": 0,
+          "fail": 70
+        },
+        "dm": {
+          "ok": 4,
+          "wrong": 0,
+          "fail": 96
+        },
+        "dqr": {
+          "ok": 69,
+          "wrong": 0,
+          "fail": 31
+        }
+      }
+    },
+    "blot/2": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 4,
+          "wrong": 0,
+          "fail": 96
+        },
+        "dm": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dqr": {
+          "ok": 26,
+          "wrong": 1,
+          "fail": 73
+        }
+      }
+    },
+    "blot/3": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dm": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dqr": {
+          "ok": 5,
+          "wrong": 6,
+          "fail": 89
+        }
+      }
+    },
+    "noise/60": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 96,
+          "wrong": 0,
+          "fail": 4
+        },
+        "dm": {
+          "ok": 8,
+          "wrong": 0,
+          "fail": 92
+        },
+        "dqr": {
+          "ok": 100,
+          "wrong": 0,
+          "fail": 0
+        }
+      }
+    },
+    "noise/80": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 88,
+          "wrong": 0,
+          "fail": 12
+        },
+        "dm": {
+          "ok": 4,
+          "wrong": 0,
+          "fail": 96
+        },
+        "dqr": {
+          "ok": 100,
+          "wrong": 0,
+          "fail": 0
+        }
+      }
+    },
+    "noise/100": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 73,
+          "wrong": 0,
+          "fail": 27
+        },
+        "dm": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dqr": {
+          "ok": 100,
+          "wrong": 0,
+          "fail": 0
+        }
+      }
+    },
+    "noise/120": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 37,
+          "wrong": 0,
+          "fail": 63
+        },
+        "dm": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dqr": {
+          "ok": 100,
+          "wrong": 0,
+          "fail": 0
+        }
+      }
+    },
+    "noise/140": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 14,
+          "wrong": 0,
+          "fail": 86
+        },
+        "dm": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dqr": {
+          "ok": 100,
+          "wrong": 0,
+          "fail": 0
+        }
+      }
+    },
+    "blur/1": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 100,
+          "wrong": 0,
+          "fail": 0
+        },
+        "dm": {
+          "ok": 100,
+          "wrong": 0,
+          "fail": 0
+        },
+        "dqr": {
+          "ok": 100,
+          "wrong": 0,
+          "fail": 0
+        }
+      }
+    },
+    "blur/2": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 100,
+          "wrong": 0,
+          "fail": 0
+        },
+        "dm": {
+          "ok": 100,
+          "wrong": 0,
+          "fail": 0
+        },
+        "dqr": {
+          "ok": 100,
+          "wrong": 0,
+          "fail": 0
+        }
+      }
+    },
+    "blur/4": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 100,
+          "wrong": 0,
+          "fail": 0
+        },
+        "dm": {
+          "ok": 100,
+          "wrong": 0,
+          "fail": 0
+        },
+        "dqr": {
+          "ok": 100,
+          "wrong": 0,
+          "fail": 0
+        }
+      }
+    },
+    "blur/6": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dm": {
+          "ok": 100,
+          "wrong": 0,
+          "fail": 0
+        },
+        "dqr": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        }
+      }
+    },
+    "blur/8": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dm": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dqr": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        }
+      }
+    },
+    "blur/10": {
+      "trials": 100,
+      "counts": {
+        "qr": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dm": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        },
+        "dqr": {
+          "ok": 0,
+          "wrong": 0,
+          "fail": 100
+        }
+      }
+    }
+  }
+}

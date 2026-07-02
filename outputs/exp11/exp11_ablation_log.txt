@@ -1,0 +1,155 @@
+exp11 ablation 시작 — TRIALS=50, N 후보=[5, 7, 9]
+
+=== 프로파일 A / patches ===
+  [A/patches] lv=20: margin 100%  N=5 100%  N=7 100%  N=9 100%
+  [A/patches] lv=30: margin 100%  N=5 100%  N=7 100%  N=9 100%
+  [A/patches] lv=40: margin 100%  N=5 100%  N=7 100%  N=9 100%
+  [A/patches] lv=50: margin 100%  N=5 100%  N=7 100%  N=9 100%
+  [A/patches] lv=60: margin 100%  N=5 96%  N=7 100%  N=9 100%
+  [A/patches] lv=70: margin 100%  N=5 88%  N=7 96%  N=9 96%
+  [A/patches] lv=80: margin 98%  N=5 64%  N=7 84%  N=9 84%
+  [A/patches] lv=90: margin 92%  N=5 44%  N=7 64%  N=9 64%
+
+=== 프로파일 B / patches ===
+  [B/patches] lv=20: margin 100%  N=5 98%  N=7 100%  N=9 100%
+  [B/patches] lv=30: margin 100%  N=5 86%  N=7 88%  N=9 88%
+  [B/patches] lv=40: margin 96%  N=5 58%  N=7 60%  N=9 64%
+  [B/patches] lv=50: margin 78%  N=5 30%  N=7 26%  N=9 30%
+  [B/patches] lv=60: margin 50%  N=5 8%  N=7 10%  N=9 10%
+  [B/patches] lv=70: margin 34%  N=5 4%  N=7 6%  N=9 6%
+  [B/patches] lv=80: margin 16%  N=5 0%  N=7 0%  N=9 0%
+  [B/patches] lv=90: margin 8%  N=5 0%  N=7 0%  N=9 0%
+
+=== 프로파일 A / noise ===
+  [A/noise] lv=100: margin 100%  N=5 100%  N=7 100%  N=9 100%
+  [A/noise] lv=105: margin 100%  N=5 100%  N=7 100%  N=9 100%
+  [A/noise] lv=110: margin 98%  N=5 100%  N=7 100%  N=9 100%
+  [A/noise] lv=115: margin 90%  N=5 100%  N=7 100%  N=9 100%
+  [A/noise] lv=120: margin 62%  N=5 100%  N=7 100%  N=9 100%
+  [A/noise] lv=125: margin 18%  N=5 100%  N=7 100%  N=9 100%
+  [A/noise] lv=130: margin 4%  N=5 100%  N=7 100%  N=9 100%
+  [A/noise] lv=135: margin 0%  N=5 100%  N=7 100%  N=9 100%
+
+=== 프로파일 B / noise ===
+  [B/noise] lv=100: margin 100%  N=5 100%  N=7 100%  N=9 100%
+  [B/noise] lv=105: margin 96%  N=5 100%  N=7 100%  N=9 100%
+  [B/noise] lv=110: margin 76%  N=5 100%  N=7 100%  N=9 100%
+  [B/noise] lv=115: margin 30%  N=5 100%  N=7 100%  N=9 100%
+  [B/noise] lv=120: margin 8%  N=5 100%  N=7 100%  N=9 100%
+  [B/noise] lv=125: margin 0%  N=5 100%  N=7 100%  N=9 100%
+  [B/noise] lv=130: margin 0%  N=5 100%  N=7 100%  N=9 100%
+  [B/noise] lv=135: margin 0%  N=5 100%  N=7 100%  N=9 100%
+
+=== 프로파일 A / blur ===
+  [A/blur] lv=6.0: margin 100%  N=5 100%  N=7 100%  N=9 100%
+  [A/blur] lv=6.5: margin 100%  N=5 100%  N=7 100%  N=9 100%
+  [A/blur] lv=7.0: margin 100%  N=5 100%  N=7 100%  N=9 100%
+  [A/blur] lv=7.5: margin 100%  N=5 100%  N=7 100%  N=9 100%
+  [A/blur] lv=8.0: margin 100%  N=5 100%  N=7 100%  N=9 100%
+  [A/blur] lv=8.5: margin 100%  N=5 100%  N=7 100%  N=9 100%
+  [A/blur] lv=9.0: margin 100%  N=5 100%  N=7 100%  N=9 100%
+  [A/blur] lv=9.5: margin 100%  N=5 0%  N=7 0%  N=9 0%
+
+N별 총 성공률 합: {5: 3276.0, 7: 3334.0, 9: 3342.0}
+N=9 최대 손실: 100.0%p (기준 10.0%p)
+
+⛔ 중단 규칙 후보 발동 — N=11로 확대 재시도
+=== 프로파일 A / patches (N=11) ===
+  [A/patches] lv=20: N=11 100%
+  [A/patches] lv=30: N=11 100%
+  [A/patches] lv=40: N=11 100%
+  [A/patches] lv=50: N=11 100%
+  [A/patches] lv=60: N=11 100%
+  [A/patches] lv=70: N=11 96%
+  [A/patches] lv=80: N=11 86%
+  [A/patches] lv=90: N=11 66%
+=== 프로파일 B / patches (N=11) ===
+  [B/patches] lv=20: N=11 100%
+  [B/patches] lv=30: N=11 88%
+  [B/patches] lv=40: N=11 62%
+  [B/patches] lv=50: N=11 26%
+  [B/patches] lv=60: N=11 10%
+  [B/patches] lv=70: N=11 6%
+  [B/patches] lv=80: N=11 0%
+  [B/patches] lv=90: N=11 0%
+=== 프로파일 A / noise (N=11) ===
+  [A/noise] lv=100: N=11 100%
+  [A/noise] lv=105: N=11 100%
+  [A/noise] lv=110: N=11 100%
+  [A/noise] lv=115: N=11 100%
+  [A/noise] lv=120: N=11 100%
+  [A/noise] lv=125: N=11 100%
+  [A/noise] lv=130: N=11 100%
+  [A/noise] lv=135: N=11 100%
+=== 프로파일 B / noise (N=11) ===
+  [B/noise] lv=100: N=11 100%
+  [B/noise] lv=105: N=11 100%
+  [B/noise] lv=110: N=11 100%
+  [B/noise] lv=115: N=11 100%
+  [B/noise] lv=120: N=11 100%
+  [B/noise] lv=125: N=11 100%
+  [B/noise] lv=130: N=11 100%
+  [B/noise] lv=135: N=11 100%
+=== 프로파일 A / blur (N=11) ===
+  [A/blur] lv=6.0: N=11 100%
+  [A/blur] lv=6.5: N=11 100%
+  [A/blur] lv=7.0: N=11 100%
+  [A/blur] lv=7.5: N=11 100%
+  [A/blur] lv=8.0: N=11 100%
+  [A/blur] lv=8.5: N=11 100%
+  [A/blur] lv=9.0: N=11 100%
+  [A/blur] lv=9.5: N=11 0%
+N=11 최대 손실: 100.0%p (기준 10.0%p)
+
+⛔ 중단 규칙 후보 발동 — N=13로 확대 재시도
+=== 프로파일 A / patches (N=13) ===
+  [A/patches] lv=20: N=13 100%
+  [A/patches] lv=30: N=13 100%
+  [A/patches] lv=40: N=13 100%
+  [A/patches] lv=50: N=13 100%
+  [A/patches] lv=60: N=13 100%
+  [A/patches] lv=70: N=13 96%
+  [A/patches] lv=80: N=13 84%
+  [A/patches] lv=90: N=13 62%
+=== 프로파일 B / patches (N=13) ===
+  [B/patches] lv=20: N=13 100%
+  [B/patches] lv=30: N=13 88%
+  [B/patches] lv=40: N=13 62%
+  [B/patches] lv=50: N=13 28%
+  [B/patches] lv=60: N=13 8%
+  [B/patches] lv=70: N=13 6%
+  [B/patches] lv=80: N=13 0%
+  [B/patches] lv=90: N=13 0%
+=== 프로파일 A / noise (N=13) ===
+  [A/noise] lv=100: N=13 100%
+  [A/noise] lv=105: N=13 100%
+  [A/noise] lv=110: N=13 100%
+  [A/noise] lv=115: N=13 100%
+  [A/noise] lv=120: N=13 100%
+  [A/noise] lv=125: N=13 100%
+  [A/noise] lv=130: N=13 100%
+  [A/noise] lv=135: N=13 100%
+=== 프로파일 B / noise (N=13) ===
+  [B/noise] lv=100: N=13 100%
+  [B/noise] lv=105: N=13 100%
+  [B/noise] lv=110: N=13 100%
+  [B/noise] lv=115: N=13 100%
+  [B/noise] lv=120: N=13 100%
+  [B/noise] lv=125: N=13 100%
+  [B/noise] lv=130: N=13 100%
+  [B/noise] lv=135: N=13 100%
+=== 프로파일 A / blur (N=13) ===
+  [A/blur] lv=6.0: N=13 100%
+  [A/blur] lv=6.5: N=13 100%
+  [A/blur] lv=7.0: N=13 100%
+  [A/blur] lv=7.5: N=13 100%
+  [A/blur] lv=8.0: N=13 100%
+  [A/blur] lv=8.5: N=13 100%
+  [A/blur] lv=9.0: N=13 100%
+  [A/blur] lv=9.5: N=13 0%
+N=13 최대 손실: 100.0%p (기준 10.0%p)
+
+채택 N=5, 최대 손실 100.0%p, 중단 규칙 발동=True, 소요 18.4분
+차트 저장: outputs/exp11/exp11_ablation_chart.png
+보고서 저장: outputs/exp11/exp11_ablation_report.md
+요약 저장: outputs/exp11/exp11_ablation_summary.json

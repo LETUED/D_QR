@@ -1,0 +1,19 @@
+[테스트 ①] 전부-0                        : PASS (판정=True, 기대=True)
+[테스트 ①] 상수(0x41)                    : PASS (판정=True, 기대=True)
+[테스트 ①] 1바이트 0                      : PASS (판정=True, 기대=True)
+[테스트 ①] 빈 메시지 (가드 대상 아님 — len 0)    : PASS (판정=False, 기대=False)
+[테스트 ①] 비상수 2바이트                    : PASS (판정=False, 기대=False)
+[테스트 ①] 정상 텍스트                      : PASS (판정=False, 기대=False)
+[테스트 ②] 코드워드 레벨 가드: PASS (off 동결=True, on 거부=True, 정상 통과=True)
+[테스트 ③] blot2 시행8 재현→봉쇄: PASS (가드 전 전부-0 재현=True [mode=soft, 소거 25, errata 48], 가드 후 거부=True)
+[테스트 ④] 스크램블 단위: PASS (결정론=True, 비0=True, 주기255=True, 역원=True, 전부-0 안전=True)
+[테스트 ⑤] v13 scr=True  len=36: PASS (결과=ok, 기대=ok, 포맷비트=True)
+[테스트 ⑤] v13 scr=True  len=40: PASS (결과=ok, 기대=ok, 포맷비트=True)
+[테스트 ⑤] v13 scr=True  len= 0: PASS (결과=ok, 기대=ok, 포맷비트=True)
+[테스트 ⑤] v13 scr=False len=23: PASS (결과=ok, 기대=ok, 포맷비트=True)
+[테스트 ⑤] v13 scr=False len=40: PASS (결과=ok, 기대=ok, 포맷비트=True)
+[테스트 ⑤] v13 scr=False len= 0: PASS (결과=fail, 기대=fail, 포맷비트=True)
+[테스트 ⑥] v9 스크램블 왕복: PASS (on=True, 기본 off 불변=True, 변환 실효=True)
+[테스트 ⑦] 가드 무해성 (노이즈 σ100 ×10): PASS
+
+=== exp15b 전체 테스트 PASS ===

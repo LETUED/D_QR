@@ -1,0 +1,56 @@
+=== 측정 ③ 실측 케이스 재현 ===
+  [case] 가드 전: {'outcome': 'wrong', 'all_zero': True, 'mode': 'soft', 'erasures': 25, 'errata': 48} → 가드 후: {'outcome': 'fail', 'reason': '공간 소거 스윕 실패 (15개 가설 전부 기각)'}
+=== 측정 ① exp15 블롯 채널 (가드 on/off) ===
+  [blot lv=1] 가드 on: ok=69 W=0 / off: ok=69 W=0 (off W 시행 [])  (121s)
+  [blot lv=2] 가드 on: ok=26 W=0 / off: ok=26 W=1 (off W 시행 [8])  (205s)
+  [blot lv=3] 가드 on: ok=5 W=0 / off: ok=5 W=6 (off W 시행 [3, 6, 8, 13, 54, 57])  (189s)
+=== 측정 ② exp11b 이미지 스위트 (v11b 가드) ===
+--- A/patches ---
+  [A/patches] lv=20: 100%
+  [A/patches] lv=30: 100%
+  [A/patches] lv=40: 100%
+  [A/patches] lv=50: 100%
+  [A/patches] lv=60: 100%
+  [A/patches] lv=70: 96%
+  [A/patches] lv=80: 84%
+  [A/patches] lv=90: 64%
+--- B/patches ---
+  [B/patches] lv=20: 100%
+  [B/patches] lv=30: 88%
+  [B/patches] lv=40: 62%
+  [B/patches] lv=50: 32%
+  [B/patches] lv=60: 10%
+  [B/patches] lv=70: 8%
+  [B/patches] lv=80: 0%
+  [B/patches] lv=90: 0%
+--- A/noise ---
+  [A/noise] lv=100: 100%
+  [A/noise] lv=105: 100%
+  [A/noise] lv=110: 100%
+  [A/noise] lv=115: 100%
+  [A/noise] lv=120: 100%
+  [A/noise] lv=125: 100%
+  [A/noise] lv=130: 100%
+  [A/noise] lv=135: 100%
+--- B/noise ---
+  [B/noise] lv=100: 100%
+  [B/noise] lv=105: 100%
+  [B/noise] lv=110: 100%
+  [B/noise] lv=115: 100%
+  [B/noise] lv=120: 100%
+  [B/noise] lv=125: 100%
+  [B/noise] lv=130: 100%
+  [B/noise] lv=135: 100%
+--- A/blur ---
+  [A/blur] lv=6.0: 100%
+  [A/blur] lv=6.5: 100%
+  [A/blur] lv=7.0: 100%
+  [A/blur] lv=7.5: 100%
+  [A/blur] lv=8.0: 100%
+  [A/blur] lv=8.5: 100%
+  [A/blur] lv=9.0: 100%
+  [A/blur] lv=9.5: 100%
+보고서 저장: outputs\exp15b\exp15b_report.md
+요약 저장: outputs\exp15b\exp15b_summary.json
+
+=== 판정: blot 7→0 (PASS) / 스위트 W=0 (PASS) / 케이스 재현 (PASS) ===

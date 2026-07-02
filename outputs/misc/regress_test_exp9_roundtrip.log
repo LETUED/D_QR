@@ -1,0 +1,19 @@
+[프로파일 A] 인쇄·실외 (인식률 우선)
+  비트/셀      : 6
+  ECC          : 30% (nsym=76)
+  격자         : r=12 (448 데이터 셀)
+  최대 용량    : 184 bytes
+  복호 모드    : hard (소거 0개)
+  이미지       : outputs/exp9/exp9_roundtrip_profileA.png (1619x1441)
+  왕복 결과    : PASS
+
+[프로파일 B] 화면·근접 (밀도 우선)
+  비트/셀      : 12
+  ECC          : 20% (nsym=51)
+  격자         : r=8 (196 데이터 셀)
+  최대 용량    : 204 bytes
+  복호 모드    : hard (소거 0개)
+  이미지       : outputs/exp9/exp9_roundtrip_profileB.png (1176x1057)
+  왕복 결과    : PASS
+
+=== exp9 전체 왕복 테스트 PASS ===

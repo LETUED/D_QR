@@ -1,0 +1,27 @@
+[프로파일 A] 인쇄·실외 (인식률 우선)
+  샘플점/삼각형 : 9
+  복호 모드     : hard (소거 0개)
+  신뢰도 이산성 : PASS
+  이미지        : outputs/exp11/exp11_roundtrip_profileA.png (1619x1441)
+  왕복 결과     : PASS
+
+[프로파일 B] 화면·근접 (밀도 우선)
+  샘플점/삼각형 : 9
+  복호 모드     : hard (소거 0개)
+  신뢰도 이산성 : PASS
+  이미지        : outputs/exp11/exp11_roundtrip_profileB.png (1176x1057)
+  왕복 결과     : PASS
+
+[프로파일 A] 오염 복구 (패치 100개, seed=7)
+  복호 모드     : soft (소거 25개)
+  soft 발동     : PASS
+  이미지        : outputs/exp11/exp11_contaminated_profileA.png
+  복구 결과     : PASS
+
+[프로파일 B] 오염 복구 (패치 50개, seed=7)
+  복호 모드     : soft (소거 17개)
+  soft 발동     : PASS
+  이미지        : outputs/exp11/exp11_contaminated_profileB.png
+  복구 결과     : PASS
+
+=== exp11 전체 왕복 테스트 PASS ===

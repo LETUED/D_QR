@@ -1,0 +1,9 @@
+anthropic>=0.49.0
+python-dotenv>=1.0.0
+
+# exp15 외부 기준선 비교 (benchmarks/exp15_baseline.py) — 전부 왕복 검증됨
+qrcode>=8.0
+opencv-python>=4.10        # QR 판독 (cv2.QRCodeDetector)
+ppf.datamatrix>=0.2        # DataMatrix 생성 (pure python)
+pylibdmtx>=0.1.10          # DataMatrix 판독 (Windows 휠에 libdmtx DLL 포함)
+setuptools>=70             # pylibdmtx가 distutils 임포트 (Python 3.12+ 필수 shim)

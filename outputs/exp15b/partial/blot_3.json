@@ -1,0 +1,1 @@
+{"trials": 100, "guarded": {"ok": 5, "wrong": 0, "fail": 95}, "unguarded": {"ok": 5, "wrong": 6, "fail": 89}, "wrong_trials_guarded": [], "wrong_trials_unguarded": [3, 6, 8, 13, 54, 57]}

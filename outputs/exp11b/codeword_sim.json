@@ -1,0 +1,32 @@
+{
+  "n_trials": 10000,
+  "tally": {
+    "legacy": {
+      "correct": 3648,
+      "wrong": 237,
+      "fail": 6115
+    },
+    "defended": {
+      "correct": 3648,
+      "wrong": 84,
+      "fail": 6268
+    },
+    "v11b": {
+      "correct": 3648,
+      "wrong": 0,
+      "fail": 6352
+    },
+    "strict_s2": {
+      "correct": 3427,
+      "wrong": 0,
+      "fail": 6573
+    }
+  },
+  "false_reject_vs_legacy": {
+    "legacy": 0,
+    "defended": 0,
+    "v11b": 0,
+    "strict_s2": 221
+  },
+  "elapsed": 636.2
+}

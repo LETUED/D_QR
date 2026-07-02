@@ -1,0 +1,13 @@
+{
+  "before": {
+    "outcome": "wrong",
+    "all_zero": true,
+    "mode": "soft",
+    "erasures": 25,
+    "errata": 48
+  },
+  "after": {
+    "outcome": "fail",
+    "reason": "공간 소거 스윕 실패 (15개 가설 전부 기각)"
+  }
+}
