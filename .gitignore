@@ -3,3 +3,6 @@ __pycache__/
 .venv/
 venv/
 *.pyc
+CLAUDE.md
+.claude/
+backup_pre_reorg_*.zip
