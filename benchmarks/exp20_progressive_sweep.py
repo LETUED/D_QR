@@ -111,7 +111,7 @@ def main():
     prog = any(r['fine'] < r['coarse'] for g in res_groups.values() for r in g)
     print(f"\n합계 {total_n}회, 침묵 오정정 {total_silent}건 "
           f"({'PASS' if total_silent == 0 else 'FAIL'}), "
-          f"점진적 공개(fine先 강등) 관측={prog}")
+          f"점진적 공개(fine이 먼저 강등) 관측={prog}")
 
     chart(res_groups)
     report(res_groups, res, total_n, total_silent, prog)
@@ -126,7 +126,7 @@ def chart(res_groups):
     plt.rcParams['axes.unicode_minus'] = False
 
     fig, axes = plt.subplots(2, 2, figsize=(13, 9))
-    fig.suptitle("exp20 점진적 공개 × 물리 열화 — coarse 생존 vs fine 先강등 "
+    fig.suptitle("exp20 점진적 공개 × 물리 열화 — coarse 생존 vs fine이 먼저 강등 "
                  f"(N={N_PER_COND}, 표 일치율 게이트, 침묵 0)", fontsize=13)
     titles = {'defocus': ("① 디포커스", "disk PSF 반경 (px)"),
               'motion': ("② 모션 블러", "커널 길이 (px)"),
@@ -161,7 +161,7 @@ def report(res_groups, enc_res, total_n, total_silent, prog):
         f"- coarse {len(COARSE)}B / fine {len(FINE)}B, r={enc_res['radius']}, "
         f"hex_size={HEX_SIZE}px, N={N_PER_COND}/조건, 시드 {SEED}, 총 {total_n}회",
         f"- 게이트 = 표 일치율(fine 표차 평균/N, 이산) — 밝기 마진 아님 (decoder_v20, FTO)",
-        f"- **침묵 오정정 {total_silent}건** · 점진적 공개(fine이 coarse보다 先강등) 관측={prog}",
+        f"- **침묵 오정정 {total_silent}건** · 점진적 공개(fine이 coarse보다 먼저 강등) 관측={prog}",
         "",
         "## 결과 (coarse 복호율 / fine 복호율 / fine 게이트)",
         "",

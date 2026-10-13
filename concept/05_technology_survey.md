@@ -214,7 +214,7 @@ D_QR 의미:
 결과: 16채널 독립 암호화 홀로그램, 낮은 채널 간 누화
 ```
 
-### 4.2.3 구조색 메타 나노프린팅 3채널 (武汉大学, 2024)
+### 4.2.3 구조색 메타 나노프린팅 3채널 (우한대학교, 2024)
 
 ```
 논문: "Structural-Color Meta-Nanoprinting Embedding Multi-Domain Spatial Light Field Information"
@@ -520,7 +520,7 @@ D_QR 개념 연결:
 |---------|---------|------|------|
 | 36-Channel Spin-Wavelength Metasurface | Junsuk Rho et al. (POSTECH) | 2025 | https://advanced.onlinelibrary.wiley.com/doi/10.1002/advs.202504634 |
 | 16-Channel Encrypted Meta-Optics | Zhongyang Li et al. | 2025 | https://advanced.onlinelibrary.wiley.com/doi/abs/10.1002/adma.202419322 |
-| Structural-Color Meta-Nanoprinting | Congling Liang et al. (武汉大学) | 2024 | https://pmc.ncbi.nlm.nih.gov/articles/PMC11636407/ |
+| Structural-Color Meta-Nanoprinting | Congling Liang et al. (우한대학교) | 2024 | https://pmc.ncbi.nlm.nih.gov/articles/PMC11636407/ |
 | 3D Petabit Optical Disk | Min Gu et al. | 2024 | https://www.nature.com/articles/s41586-023-06980-y |
 | Information Multiplexing: Optical→Metaholography | - | 2024 | https://pmc.ncbi.nlm.nih.gov/articles/PMC11501936/ |
 

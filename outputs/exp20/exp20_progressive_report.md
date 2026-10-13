@@ -2,7 +2,7 @@
 
 - coarse 73B / fine 146B, r=12, hex_size=24px, N=30/조건, 시드 20020, 총 630회
 - 게이트 = 표 일치율(fine 표차 평균/N, 이산) — 밝기 마진 아님 (decoder_v20, FTO)
-- **침묵 오정정 0건** · 점진적 공개(fine이 coarse보다 先강등) 관측=True
+- **침묵 오정정 0건** · 점진적 공개(fine이 coarse보다 먼저 강등) 관측=True
 
 ## 결과 (coarse 복호율 / fine 복호율 / fine 게이트)
 
