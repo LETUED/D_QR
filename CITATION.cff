@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "이 연구나 코드를 사용한다면 아래 정보로 인용해 주세요."
+title: "D_QR: 다차원 QR 코드 연구"
+type: software
+authors:
+  - name: "dglst (LETUED)"
+repository-code: "https://github.com/LETUED/D_QR"
+license: Apache-2.0
+abstract: "QR의 모듈당 1비트 한계를 넘기 위해 모듈을 스칼라에서 벡터로 확장한 연구. 육각 격자, RS 소거 복호, 점진 공개 구조를 다룬다."
+keywords:
+  - QR code
+  - error correction
+  - Reed-Solomon
+  - hexagonal grid
