@@ -69,7 +69,7 @@ def make_code():
 
 
 def try_decode(image, params, coarse_truth, fine_truth):
-    """복호 시도 → 원본 일치 여부 (침묵 오정정은 불일치로 잡힘)."""
+    """복호 시도 → 원본 일치 여부 (미검출 오복호는 불일치로 잡힘)."""
     try:
         st = DQRDecoderV10().decode_with_stats(image, **params)
     except Exception:
@@ -391,7 +391,7 @@ def make_report(result, metrics, res_a, led_rows, k_c, k_f, speckle_rows,
         f"C별 {SPECKLE_TRIALS}회 시행",
         "- 판독: 기존 decoder_v10 그대로 (전역 임계 128, 새 신뢰도 메트릭 "
         "도입 없음 — FTO 1·2 준수). 성공 = 페이로드 원본 일치 "
-        "(침묵 오정정은 실패로 집계)",
+        "(미검출 오복호는 실패로 집계)",
         "",
         "## (b) 백색 LED 분산 — κ 스윕 상세",
         "",

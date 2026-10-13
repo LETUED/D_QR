@@ -1,13 +1,13 @@
 """
-exp12 침묵 오정정 3층 방어 단위 테스트 + 회귀 확인
+exp12 미검출 오복호 3층 방어 단위 테스트 + 회귀 확인
 실행: py -X utf8 tests/test_exp12_defense.py  (프로젝트 루트에서)
 
 ① 1층: 사다리 단계 목록이 nsym-2로 상한 적용되는지
 ② 2층: 재인코딩 대조가 보고되지 않은 위치의 불일치를 잡는지
-③ 1층 통합: 풀소거 침묵 오정정 시나리오(결정론적 구성)가
+③ 1층 통합: 풀소거 미검출 오복호 시나리오(결정론적 구성)가
    구동작에서는 wrong-success, 방어 후에는 차단되는지
 ④ 3층: 깨끗한 이미지는 게이트 통과+fine 복호, 강블러는 RS 미시도 차단
-⑤ exp10 blur 6.0px 실측 침묵 오정정 케이스가 v12에서 차단되는지
+⑤ exp10 blur 6.0px 실측 미검출 오복호 케이스가 v12에서 차단되는지
 ⑥ 회귀: exp9/exp10/exp11 왕복 테스트가 여전히 PASS인지 (서브프로세스)
 """
 import subprocess
@@ -52,7 +52,7 @@ def test_layer2_reencode_check():
     # RS가 위치 3을 정정했다고 보고한 경우 → 정상
     ok_reported = reencode_mismatch_ok(rsc, bytes(codeword), data,
                                        erase_pos=None, errata_pos=[3])
-    # 아무 정정도 보고하지 않았는데 코드워드가 다름 → 오정정 의심
+    # 아무 정정도 보고하지 않았는데 코드워드가 다름 → 오복호 의심
     ok_unreported = reencode_mismatch_ok(rsc, bytes(codeword), data,
                                          erase_pos=None, errata_pos=[])
     # 소거로 표시된 위치의 불일치는 허용
@@ -68,7 +68,7 @@ def test_layer2_reencode_check():
 
 def test_layer1_blocks_full_erasure_miscorrection():
     """
-    ③ 풀소거 침묵 오정정의 결정론적 재현 + 차단.
+    ③ 풀소거 미검출 오복호의 결정론적 재현 + 차단.
 
     nsym=8, 오류 5개를 '신뢰도가 높은' 위치에 주입하고 신뢰도 최하위
     8개는 전부 정상 바이트로 구성 → hard·중간 단계는 2·5+k > 8로 실패,
@@ -92,7 +92,7 @@ def test_layer1_blocks_full_erasure_miscorrection():
                                     cap=False, verify=False)
         legacy_wrong = res['data'] != data and res['erasures_used'] == nsym
     except ReedSolomonError:
-        legacy_wrong = False  # 구동작이 오정정을 안 냈다면 시나리오 무효
+        legacy_wrong = False  # 구동작이 오복호를 안 냈다면 시나리오 무효
 
     try:
         erasure_ladder_decode(bytes(codeword), conf, nsym, len(data))
@@ -101,9 +101,9 @@ def test_layer1_blocks_full_erasure_miscorrection():
         defended_blocked = True
 
     ok = legacy_wrong and defended_blocked
-    print(f"[테스트 ③] 풀소거 오정정 재현·차단"
+    print(f"[테스트 ③] 풀소거 오복호 재현·차단"
           f" : {'PASS' if ok else 'FAIL'} "
-          f"(구동작 오정정={legacy_wrong}, 방어 후 차단={defended_blocked})")
+          f"(구동작 오복호={legacy_wrong}, 방어 후 차단={defended_blocked})")
     return ok
 
 
@@ -162,7 +162,7 @@ def test_layer3_gate():
 
 
 def test_blur6_miscorrection_blocked(code):
-    """⑤ exp10 blur 6.0px 실측 침묵 오정정 케이스 — 3층 모두에서 차단."""
+    """⑤ exp10 blur 6.0px 실측 미검출 오복호 케이스 — 3층 모두에서 차단."""
     import numpy as np
     from PIL import ImageFilter
     from src.exp10_progressive.decoder_v10 import DQRDecoderV10
@@ -195,9 +195,9 @@ def test_blur6_miscorrection_blocked(code):
     layers12_block = s12n['fine'] is None and s12n['rs_attempted']
 
     ok = legacy_silent and gated and layers12_block
-    print(f"[테스트 ⑤] blur 6.0px 침묵 오정정 차단"
+    print(f"[테스트 ⑤] blur 6.0px 미검출 오복호 차단"
           f" : {'PASS' if ok else 'FAIL'} "
-          f"(구동작 오정정 재현={legacy_silent}, 게이트 차단={gated}, "
+          f"(구동작 오복호 재현={legacy_silent}, 게이트 차단={gated}, "
           f"1+2층 차단={layers12_block})")
     return ok
 

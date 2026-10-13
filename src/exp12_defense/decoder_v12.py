@@ -1,5 +1,5 @@
 """
-D_QR Phase 12 디코더 — 침묵 오정정 3층 방어 + 신뢰도 게이트 실시예 (exp12)
+D_QR Phase 12 디코더 — 미검출 오복호 3층 방어 + 신뢰도 게이트 실시예 (exp12)
 
 3층 방어:
   1층 — 사다리 상한 (nsym → nsym-2)      : src/core/softdecode.ladder_steps
@@ -19,12 +19,12 @@ D_QR Phase 12 디코더 — 침묵 오정정 3층 방어 + 신뢰도 게이트 �
 게이트 임계값 캘리브레이션 (benchmarks/exp12_miscorrection.py 실측):
   exp10 표준 코드(r=12, hex_size=32) 블러 스윕 0~10px, N=9 표결 기준
     마지막 정상 복호(blur 5.5px) vote 신뢰도 = 0.4199
-    침묵 오정정 지점(blur 6.0px)  vote 신뢰도 = 0.3911
+    미검출 오복호 지점(blur 6.0px)  vote 신뢰도 = 0.3911
   → 임계값 = 두 값의 중간 0.405.
   주의: vote 신뢰도는 블러에 단조가 아니다 — 6.5px 이상에서 0.41~0.44
   고원이 형성돼 게이트를 통과한다 (exp11 블러 절벽과 동근원: t=0.5 외곽
   샘플이 이웃 번짐을 흡수해 표가 안정적으로 갈라짐). 이 고원 구간의
-  오정정은 1층(사다리 상한)·2층(재인코딩 대조)이 결정론적으로 차단한다
+  오복호는 1층(사다리 상한)·2층(재인코딩 대조)이 결정론적으로 차단한다
   — 3층 게이트는 단독 방어가 아니라 심층 방어의 첫 관문.
   실측 근거: outputs/exp12/exp12_miscorrection_report.md
 """
@@ -40,7 +40,7 @@ from src.exp10_progressive.encoder_v10 import GRAINS, split_data_cells
 from reedsolo import ReedSolomonError
 
 # 3층 게이트 기본 임계값 — benchmarks/exp12_miscorrection.py 블러 스윕 실측 보정:
-# 마지막 정상 복호(5.5px, 0.4199)와 침묵 오정정(6.0px, 0.3911)의 중간값
+# 마지막 정상 복호(5.5px, 0.4199)와 미검출 오복호(6.0px, 0.3911)의 중간값
 FINE_GATE_THRESHOLD = 0.405
 
 # 게이트용 표결 샘플점 수 — exp11 ablation에서 채택된 값(N=9)과 동일

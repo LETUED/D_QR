@@ -1,8 +1,8 @@
 """
 exp15 — 외부 기준선 비교: QR(ECC-H)·DataMatrix(ECC200) vs D_QR(프로파일 A + v11b)
 
-D_QR의 "오염 내성 + 무오정정" 주장을 상용 심볼로지 구현과 동일 조건에서 검증한다.
-핵심 차별 지표는 성공률이 아니라 **침묵 오정정률** — 디코더가 무언가를
+D_QR의 "오염 내성 + 무오복호" 주장을 상용 심볼로지 구현과 동일 조건에서 검증한다.
+핵심 차별 지표는 성공률이 아니라 **미검출 오복호율** — 디코더가 무언가를
 반환했는데 원본과 다른 경우(cv2/pylibdmtx가 오염에서 틀린 페이로드를 내는가).
 
 공정 비교 규약:
@@ -20,7 +20,7 @@ D_QR의 "오염 내성 + 무오정정" 주장을 상용 심볼로지 구현과 �
   ② noise   — 가우시안 노이즈 σ60~140
   ③ blur    — 가우시안 블러 1~10px
 
-측정 (조건당 N=100): 성공률 / 침묵 오정정률 / 거부율 + Wilson 95% CI.
+측정 (조건당 N=100): 성공률 / 미검출 오복호율 / 거부율 + Wilson 95% CI.
 
 실행 (프로젝트 루트에서):
   py -X utf8 benchmarks/exp15_baseline.py                     # 전체 + 집계
@@ -341,7 +341,7 @@ CHANNELS = {
 
 
 def classify(out):
-    """'ok' | 'wrong'(침묵 오정정) | 'fail'(거부)."""
+    """'ok' | 'wrong'(미검출 오복호) | 'fail'(거부)."""
     if out is None or len(out) == 0:
         return 'fail'
     return 'ok' if out == PAYLOAD else 'wrong'
@@ -442,7 +442,7 @@ def make_chart(res, sym_keys, syms_meta):
     n_total = sum(res[(ch, lv)]['trials']
                   for ch, cfg in CHANNELS.items() for lv in cfg['levels'])
 
-    # 패널 4: 침묵 오정정 총계 (핵심 차별 지표)
+    # 패널 4: 미검출 오복호 총계 (핵심 차별 지표)
     ax = flat[4]
     tot_w = {k: sum(res[(ch, lv)]['counts'][k]['wrong']
                     for ch, cfg in CHANNELS.items() for lv in cfg['levels'])
@@ -453,12 +453,12 @@ def make_chart(res, sym_keys, syms_meta):
     for b, k in zip(bars, sym_keys):
         ax.text(b.get_x() + b.get_width() / 2, b.get_height() + 0.3,
                 str(tot_w[k]), ha='center', fontsize=11, fontweight='bold')
-    ax.set_title(f'침묵 오정정 총계 — 틀린 페이로드를 성공으로 반환 '
+    ax.set_title(f'미검출 오복호 총계 — 틀린 페이로드를 성공으로 반환 '
                  f'(전 조건 합산, {n_total:,} 이미지/심볼로지)')
     ax.set_ylabel('건수')
     ax.grid(alpha=0.3, axis='y')
 
-    # 패널 5: 채널별 침묵 오정정 분해
+    # 패널 5: 채널별 미검출 오복호 분해
     ax = flat[5]
     chs = list(CHANNELS)
     width = 0.8 / len(sym_keys)
@@ -475,7 +475,7 @@ def make_chart(res, sym_keys, syms_meta):
                         str(w_), ha='center', fontsize=8)
     ax.set_xticks(range(len(chs)))
     ax.set_xticklabels([CHANNELS[c]['title'] for c in chs], fontsize=8)
-    ax.set_title('채널별 침묵 오정정 건수')
+    ax.set_title('채널별 미검출 오복호 건수')
     ax.set_ylabel('건수')
     ax.grid(alpha=0.3, axis='y')
     ax.legend(fontsize=8)
@@ -513,7 +513,7 @@ def make_report(res, sym_keys, syms):
 
     lines = [
         "# exp15 — 외부 기준선 비교: QR·DataMatrix vs D_QR "
-        "(오염 내성 + 무오정정)",
+        "(오염 내성 + 무오복호)",
         "",
         f"- 페이로드: `{TEXT}` ({len(PAYLOAD)} bytes UTF-8, 한국어+영문)",
         f"- 조건 {n_conds}개 × N={TRIALS} (조건당), seed={SEED} — "
@@ -522,7 +522,7 @@ def make_report(res, sym_keys, syms):
         f"{int(math.sqrt(SYMBOL_AREA))}×{int(math.sqrt(SYMBOL_AREA))}px "
         f"상당 면적으로 LANCZOS 정규화 → {CANVAS}×{CANVAS} 백색 캔버스 "
         "중앙 배치",
-        "- **침묵 오정정(W) = 디코더가 무언가를 반환했는데 원본과 다름** — "
+        "- **미검출 오복호(W) = 디코더가 무언가를 반환했는데 원본과 다름** — "
         "핵심 차별 지표",
         "",
         "## 기준선 가용성",
@@ -563,8 +563,8 @@ def make_report(res, sym_keys, syms):
         "A는 nsym=76 (이 페이로드 길이에서는 코드워드의 절반 이상이 "
         "패리티). 짧은 페이로드에서 D_QR의 실효 ECC 비중이 가장 높은 축에 "
         "속하므로, 성공률 우위 해석 시 이 차이를 감안해야 한다. 반대로 "
-        "침묵 오정정은 ECC 양이 아니라 **수락 규칙**의 문제다 — ECC가 "
-        "많아도 잘못된 정정을 수락하면 오정정이 발생한다.",
+        "미검출 오복호는 ECC 양이 아니라 **수락 규칙**의 문제다 — ECC가 "
+        "많아도 잘못된 정정을 수락하면 오복호가 발생한다.",
         "",
         "## 공정성 논의",
         "",
@@ -576,9 +576,9 @@ def make_report(res, sym_keys, syms):
         "메타데이터 없는 자기기술 검출은 exp13에서 별도 검증 중이며 아직 "
         "공간 소거 스윕과 통합되지 않았다). 반면 (1) 열화는 세 심볼로지에 "
         "동일 시드·동일 파라미터로 가해지고, (2) 점유 면적이 동일하며, "
-        "(3) 침묵 오정정 지표는 검출 단계와 무관하게 '반환했으면 책임진다' "
+        "(3) 미검출 오복호 지표는 검출 단계와 무관하게 '반환했으면 책임진다' "
         "기준이므로 검출 비대칭의 영향을 받지 않는다 — 오히려 검출 실패가 "
-        "많을수록 반환 자체가 줄어 오정정 기회도 준다. pylibdmtx에는 "
+        "많을수록 반환 자체가 줄어 오복호 기회도 준다. pylibdmtx에는 "
         f"시행당 {DM_TIMEOUT_MS}ms 탐색 상한을 두었다(무한 탐색 방지 — "
         "거부율에 보수적으로 작용할 수 있음).",
         "",
@@ -595,7 +595,7 @@ def make_report(res, sym_keys, syms):
         "",
         "## 결과 총괄",
         "",
-        f"| 심볼로지 | 성공 | **침묵 오정정** | 거부 | 오정정률 "
+        f"| 심볼로지 | 성공 | **미검출 오복호** | 거부 | 오복호율 "
         f"(전 {n_total:,}회 중) |",
         "|---------|------|---------------|------|----------------|",
     ]
@@ -620,7 +620,7 @@ def make_report(res, sym_keys, syms):
             cells = [fmt_cell(saved['counts'][k], n) for k in sym_keys]
             lines.append(f"| {lv} | " + " | ".join(cells) + " |")
         lines.append("")
-        lines.append("W = 침묵 오정정 건수 (성공으로 위장한 틀린 반환), "
+        lines.append("W = 미검출 오복호 건수 (성공으로 위장한 틀린 반환), "
                      "표기 없는 잔여분은 거부.")
         lines.append("")
 
@@ -661,7 +661,7 @@ def finalize():
     lines += (losing if losing
               else ["- 측정 조건에서 10%p 이상 열세 구간 없음 (단, ECC "
                     "오버헤드·검출 비대칭 차이를 감안할 것 — 위 공정성 논의)"])
-    # D_QR 침묵 오정정이 관측되면 조건별 분해를 명시 (정직 보고)
+    # D_QR 미검출 오복호가 관측되면 조건별 분해를 명시 (정직 보고)
     dqr_wrong_conds = [
         (ch, lv, res[(ch, lv)]['counts']['dqr']['wrong'])
         for ch, cfg in CHANNELS.items() for lv in cfg['levels']
@@ -670,9 +670,9 @@ def finalize():
     if dqr_wrong_conds:
         lines += [
             "",
-            "## D_QR 침묵 오정정 분석 — 전부-0 코드워드 퇴화 (정직 보고)",
+            "## D_QR 미검출 오복호 분석 — 전부-0 코드워드 퇴화 (정직 보고)",
             "",
-            "측정에서 D_QR(v11b)에 침묵 오정정이 발생했다: "
+            "측정에서 D_QR(v11b)에 미검출 오복호가 발생했다: "
             + ", ".join(f"{CHANNELS[ch]['title']} {CHANNELS[ch]['xlabel']}"
                         f"={lv}에서 {w}건" for ch, lv, w in dqr_wrong_conds)
             + ". 전수 재현 검사 결과 **반환값이 모두 전부-0 페이로드(59바이트 "
@@ -693,7 +693,7 @@ def finalize():
             "이미지에서 파인더가 파괴되어 시도 자체를 거부했지만, D_QR은 "
             "기하 파라미터를 제공받아 거의 빈 심볼을 끝까지 복호했다. "
             "그럼에도 '반환했으면 책임진다' 기준에서 변명이 되지 않으므로 "
-            "오정정으로 정직하게 계수한다.",
+            "오복호로 정직하게 계수한다.",
             "",
             "후속 과제(디코더 측, exp15 범위 밖): 전부-0(또는 상수) 코드워드 "
             "거부 규칙. 이는 특정 퇴화 출력에 대한 가드이지 페이로드 "
@@ -705,14 +705,14 @@ def finalize():
         "",
         "## 결론",
         "",
-        f"- 전 {n_total:,}회/심볼로지 측정에서 침묵 오정정: D_QR(v11b) "
+        f"- 전 {n_total:,}회/심볼로지 측정에서 미검출 오복호: D_QR(v11b) "
         f"**{tot.get('dqr', {}).get('wrong', '?')}건** vs "
         + ", ".join(f"{SYM_LABELS[k]} {tot[k]['wrong']}건"
                     for k in sym_keys if k != 'dqr') + ".",
-        "- D_QR의 포지셔닝 주장은 '성공률 우위'가 아니라 **무오정정**(틀린 "
+        "- D_QR의 포지셔닝 주장은 '성공률 우위'가 아니라 **무오복호**(틀린 "
         "데이터를 절대 성공으로 반환하지 않음)이다 — 성공률에서 지는 "
         "구간이 있어도 이 주장과 모순되지 않는다."
-        + (" 단, 위 전부-0 퇴화 모드가 해소되기 전까지 무오정정 주장에는 "
+        + (" 단, 위 전부-0 퇴화 모드가 해소되기 전까지 무오복호 주장에는 "
            "'전부-0 거부 가드 적용 전' 단서가 붙어야 한다."
            if dqr_wrong_conds else ""),
         "",

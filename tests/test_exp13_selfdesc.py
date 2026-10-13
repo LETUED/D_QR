@@ -16,7 +16,7 @@ exp13 테스트 — 자기기술 코드 (포맷 링 + 파인더 비대칭화 + �
 ⑦ CLI 통합: dqr_encode --exp13 → 메타데이터 없는 PNG → dqr_decode 자동 인식
 ⑧ 회귀: exp9/exp11 왕복 테스트 PASS (hex_grid 주석 정정이 동작 불변임을 확인)
 ⑨ 군집 블롯 오염: 메타데이터 없는 PNG + 360px 균일 회색 블롯 —
-   사다리 실패(스윕 비활성 시 명시적 실패, 침묵 오정정 0)를 v13 공간 소거
+   사다리 실패(스윕 비활성 시 명시적 실패, 미검출 오복호 0)를 v13 공간 소거
    스윕(exp13 셀 배치 그룹 유도)이 다중 가설 합의로 정확 복구
 """
 import subprocess
@@ -311,7 +311,7 @@ def test_regression():
 
 
 def test_cluster_sweep_recovery():
-    """⑨ 군집 블롯: v13 스윕 합의 복구 + 스윕 비활성 시 침묵 오정정 0."""
+    """⑨ 군집 블롯: v13 스윕 합의 복구 + 스윕 비활성 시 미검출 오복호 0."""
     OUT.mkdir(parents=True, exist_ok=True)
     data, result, img, _ = make_code('A')
     size, fy, fx = CLUSTER_BLOT_V13
@@ -332,7 +332,7 @@ def test_cluster_sweep_recovery():
         recovered, sweep_used, consensus = False, False, 0
 
     # 스윕 비활성: 사다리만으로는 명시적 실패여야 한다
-    # ('wrong' = 침묵 오정정 → FAIL, 'ok' = 블롯이 스윕을 강제하지 못함 → FAIL)
+    # ('wrong' = 미검출 오복호 → FAIL, 'ok' = 블롯이 스윕을 강제하지 못함 → FAIL)
     try:
         s0 = DQRDecoderV13(use_sweep=False).decode_with_stats(loaded)
         no_sweep = 'ok' if s0['data'] == data else 'wrong'

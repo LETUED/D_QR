@@ -8,7 +8,7 @@ D_QR Phase 13 디코더 — 메타데이터 없이 이미지만으로 디코딩 
      기대 패턴(차등 파인더 포함)을 7점 다수결로 대조 → 유일 가설 확정
   3. 포맷 링 판독 — 18비트 × 3사본 비트별 다수결 → version·profile·
      ecc_level·radius_idx. radius_idx가 1단계 추정과 일치해야 확정
-     (가설이 여러 개 살아남으면 모호 오류 — 침묵 오정정보다 명시 실패)
+     (가설이 여러 개 살아남으면 모호 오류 — 미검출 오복호보다 명시 실패)
   4. 페이로드     — exp11b 계열 표 일치율 판독(외곽 링 → 내부 링 폴백)
      + 소거 사다리(budget=True: 1·2층 + errata 예산 + 최종 단계 순수 소거)
      + 사다리 전 패스 실패 시 공간 소거 스윕(exp11b 결함① 경로 —
@@ -234,7 +234,7 @@ class DQRDecoderV13:
             raise ValueError("exp13: 파인더/포맷 링 검출 실패 "
                              "(자기기술 코드가 아니거나 규약 외 이미지)")
         if len(viable) > 1:
-            # 침묵 오정정보다 명시적 실패 — exp12 이후 일관 원칙
+            # 미검출 오복호보다 명시적 실패 — exp12 이후 일관 원칙
             raise ValueError(f"exp13: 방향·기하 가설 모호 ({len(viable)}건)")
 
         geo, rot_k, mirrored, fmt = viable[0]
@@ -252,7 +252,7 @@ class DQRDecoderV13:
 
         def finalize(res, rings):
             # 사다리·스윕 공통 마무리 — 길이 프리픽스 무결성 위반 =
-            # 오정정 신호 → ReedSolomonError로 해당 결과 폐기
+            # 오복호 신호 → ReedSolomonError로 해당 결과 폐기
             msg = res['data']
             if fmt['scramble']:
                 # exp15b: 인코더가 패딩 포함 메시지에 XOR한 LFSR 마스크 원복

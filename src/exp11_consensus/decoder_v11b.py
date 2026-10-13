@@ -10,7 +10,7 @@ exp11(decoder_v11)은 보존하고 이 파일에 v11b를 추가한다. exp11 abl
       단위의 위치 가설 소거 시행. 순수 시행은 신뢰도 메트릭 자체를 쓰지
       않으므로 Honeywell 울타리 바깥 + Forney GMD(1966) 선행기술 위.
       수락은 다중 가설 합의(≥3, 2위의 2배, 순수 시행 포함, 후보 예산
-      nsym-2)를 통과해야 한다 — 첫 수락 방식의 오정정 경로 차단.
+      nsym-2)를 통과해야 한다 — 첫 수락 방식의 오복호 경로 차단.
 
   결함② 블러 절벽 (9.5px에서 t=0.5 외곽 샘플이 이웃 번짐 흡수)
     → 내부 링 폴백 패스 (consensus.INNER_RINGS = (0.3, 0.15)).
@@ -18,14 +18,14 @@ exp11(decoder_v11)은 보존하고 이 파일에 v11b를 추가한다. exp11 abl
       실패 시 2차 패스가 N=9 전 샘플을 무게중심 근방(t≤0.3)에 두고
       재판독해 이웃 번짐 흡수를 차단한다.
 
-  결함③ 청크 errata 예산 (exp12 잔존 오정정 84건 시그니처)
+  결함③ 청크 errata 예산 (exp12 잔존 오복호 84건 시그니처)
     → 사다리에 budget=True 이중 방어 적용 (src/core/softdecode):
       3-a 청크별 2·오류+소거 ≤ nsym 유일 복호 반경 검사,
       3-b 최종 소거 단계 BM 오류 탐색 금지(only_erasures).
       스윕 후보는 더 엄격한 nsym-2 예산 (위 결함① 참조).
 
 exp15b 추가 — 4층 퇴화 코드워드 가드 (reject_degenerate, 기본 on):
-    exp15 기준선 비교의 D_QR 침묵 오정정 7건은 전부 "전부-0 코드워드
+    exp15 기준선 비교의 D_QR 미검출 오복호 7건은 전부 "전부-0 코드워드
     퇴화" 단일 모드 — RS 선형성상 전부-0은 항상 유효 코드워드라 3층
     방어가 전부 무력했다. 복호 결과가 전부-0/상수 메시지면 거부한다
     (softdecode.is_degenerate_message — 사다리·스윕 양 경로 적용).
@@ -186,7 +186,7 @@ class DQRDecoderV11B(DQRDecoderV11):
         for rings, codeword, byte_conf in reads:
             try:
                 # 스윕 후보 예산은 nsym-2 (spatial 기본값) — 사다리(slack=0)와
-                # 달리 가설 시행이라 여력 강제가 오정정 후보만 정확히 걸러냄
+                # 달리 가설 시행이라 여력 강제가 오복호 후보만 정확히 걸러냄
                 res = spatial_erasure_sweep(
                     codeword, byte_conf, nsym, data_len, groups,
                     conf_fill=self.conf_fill,

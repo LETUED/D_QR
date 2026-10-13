@@ -13,7 +13,7 @@ exp16 검출 파이프라인 v0 — 왜곡 스윕 벤치마크
 측정:
   검출률      = 기하 가설 ≥1건 (파인더 패턴+콰이어트 링 사전검증 통과)
   디코딩 성공 = 페이로드 == 원본
-  침묵 오정정 = 디코딩 반환했는데 페이로드 ≠ 원본 (0 유지 필수)
+  미검출 오복호 = 디코딩 반환했는데 페이로드 ≠ 원본 (0 유지 필수)
 
 산출물: outputs/exp16/exp16_detect_chart.png, exp16_detect_report.md
 """
@@ -80,7 +80,7 @@ def make_scene(img, rng, angle=0.0, scale=1.0, tilt=0.0, bg=255, noise=0.0,
 
 
 def run_condition(img, data, label, n=None, **scene_kw):
-    """조건 1개 실측 → dict (검출/성공/명시실패/침묵 오정정 수)."""
+    """조건 1개 실측 → dict (검출/성공/명시실패/미검출 오복호 수)."""
     n = N_PER_COND if n is None else n   # 호출 시점 조회 → 모듈 변수 덮어쓰기 가능
     # zlib.crc32 = 결정론 (내장 hash는 프로세스마다 솔트가 달라 재현 불가)
     rng = np.random.default_rng(SEED + zlib.crc32(label.encode('utf-8')))
@@ -110,7 +110,7 @@ def run_condition(img, data, label, n=None, **scene_kw):
             pass
     dt = (time.time() - t0) / n
     print(f"  {label:18s}: 검출 {det}/{n}, 성공 {ok}/{n}, "
-          f"침묵 오정정 {silent}, {dt * 1000:.0f}ms/회")
+          f"미검출 오복호 {silent}, {dt * 1000:.0f}ms/회")
     return {'label': label, 'n': n, 'detected': det, 'ok': ok,
             'silent': silent, 'ms': dt * 1000}
 
@@ -145,7 +145,7 @@ def main():
 
     total_n = sum(r['n'] for grp in res.values() for r in grp)
     total_silent = sum(r['silent'] for grp in res.values() for r in grp)
-    print(f"\n합계 {total_n}회, 침묵 오정정 {total_silent}건 "
+    print(f"\n합계 {total_n}회, 미검출 오복호 {total_silent}건 "
           f"({'PASS' if total_silent == 0 else 'FAIL — 0이어야 함'})")
 
     chart(res)
@@ -162,7 +162,7 @@ def chart(res):
 
     fig, axes = plt.subplots(2, 2, figsize=(12, 8.5))
     fig.suptitle("exp16 검출 파이프라인 v0 — 왜곡 스윕 "
-                 f"(N={N_PER_COND}/조건, 침묵 오정정 0 확인)", fontsize=13)
+                 f"(N={N_PER_COND}/조건, 미검출 오복호 0 확인)", fontsize=13)
 
     def rates(grp):
         return ([100 * r['detected'] / r['n'] for r in grp],
@@ -229,7 +229,7 @@ def report(res, enc_result, total_n, total_silent):
         f"nsym={enc_result['nsym']}, 기준 hex_size={HEX_SIZE}px",
         f"- 조건당 N={N_PER_COND}, 시드 {SEED} 고정 (재현 가능), "
         f"총 {total_n}회",
-        f"- **침묵 오정정: {total_silent}건** "
+        f"- **미검출 오복호: {total_silent}건** "
         f"({'0 유지' if total_silent == 0 else '위반!'}) — 검출 실패는 전부 "
         "명시적 예외(DetectionError/ReedSolomonError)",
         "",
@@ -242,7 +242,7 @@ def report(res, enc_result, total_n, total_silent):
         "",
         "## 결과",
         "",
-        "| 조건 | 검출률 | 디코딩 성공률 | 침묵 오정정 |",
+        "| 조건 | 검출률 | 디코딩 성공률 | 미검출 오복호 |",
         "|------|--------|---------------|-------------|",
     ]
     for grp in res.values():

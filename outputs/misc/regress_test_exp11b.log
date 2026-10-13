@@ -7,7 +7,7 @@
 [테스트 ⑤] 군집 오염 A: PASS (v11=wrong, v11b=ok, sweep=True, 합의 4건)
 [테스트 ⑤] 군집 오염 B: PASS (v11=fail, v11b=ok, sweep=True, 합의 4건)
 [테스트 ⑥] errata 예산 경계: PASS (slack0 경계 통과=True, slack2 거부=True, 초과 거부=True)
-[테스트 ⑦] 코드워드 시뮬 축소판 (N=1000): PASS (1+2층 오정정=7, v11b 오정정=0, v11b 정상복호=359)
+[테스트 ⑦] 코드워드 시뮬 축소판 (N=1000): PASS (1+2층 오복호=7, v11b 오복호=0, v11b 정상복호=359)
 [테스트 ⑧] 회귀 test_exp9_roundtrip.py      : PASS
 [테스트 ⑧] 회귀 test_exp10_roundtrip.py     : PASS
 [테스트 ⑧] 회귀 test_exp11_roundtrip.py     : PASS

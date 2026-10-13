@@ -1,17 +1,17 @@
 """
-exp12 침묵 오정정 3층 방어 검증 벤치마크
+exp12 미검출 오복호 3층 방어 검증 벤치마크
 실행: py -X utf8 benchmarks/exp12_miscorrection.py [--n 10000]  (프로젝트 루트)
 
 ① 코드워드 레벨 (N≥10,000, seed 고정):
    exp10 fine 스트림 구성(nsym=51, data 206B → 코드워드 308B, 2청크)에
    무작위 바이트 오류 주입 → 소거 사다리 복호.
    방어 전(cap=False, verify=False) vs 후(1·2층 기본 적용)의
-   오정정률(성공 반환했는데 원본 불일치)·false reject를 비교.
+   오복호율(성공 반환했는데 원본 불일치)·false reject를 비교.
 
 ② 게이트 캘리브레이션: exp10 표준 코드 블러 스윕 0~10px에서
    fine vote 신뢰도(exp11 표결 메트릭, N=9)를 실측 → 임계값 근거 기록.
 
-③ 이미지 레벨: exp10 blur 6.0px 침묵 오정정 케이스 재현 →
+③ 이미지 레벨: exp10 blur 6.0px 미검출 오복호 케이스 재현 →
    1층 단독 / 1+2층 / 3층 게이트 각각의 차단 여부 확인.
 
 ④ false reject: 방어로 인해 정상 복호가 실패로 바뀌는 손실 측정
@@ -47,7 +47,7 @@ SIM_DATA_LEN = 206
 # 오류 수 범위: 오류 단독 한계(25개) 아래부터 풀소거 한계(51개) 너머까지
 SIM_ERR_RANGE = (10, 81)
 BLUR_LEVELS = [x * 0.5 for x in range(0, 21)]
-MISCORRECTION_BLUR = 6.0  # exp10에서 침묵 오정정이 관측된 레벨
+MISCORRECTION_BLUR = 6.0  # exp10에서 미검출 오복호가 관측된 레벨
 
 
 # ── ① 코드워드 레벨 시뮬레이션 ──────────────────────────────────────────
@@ -59,7 +59,7 @@ def simulate_codeword_level(n_trials: int) -> dict:
     신뢰도 모델: 오류 바이트 conf ~ U[0,60], 정상 바이트 conf ~ U[20,128]
     — 구간이 겹치게 해 '신뢰도가 오류 위치를 완벽히 가리키지 못하는'
     블러·오염 실측 상황을 모사 (완벽한 conf면 풀소거 단계가 항상 옳아
-    오정정이 원천 차단돼 비교가 무의미해짐).
+    오복호가 원천 차단돼 비교가 무의미해짐).
     """
     rng = np.random.default_rng(SEED)
     rsc = RSCodec(SIM_NSYM)
@@ -71,9 +71,9 @@ def simulate_codeword_level(n_trials: int) -> dict:
     }
     cross = {}            # (legacy 결과, defended 결과) → 건수 (3×3 전이표)
     false_reject = 0      # legacy 정상 복호였는데 방어 후 실패
-    blocked_wrong = 0     # legacy 오정정이었는데 방어 후 실패(차단 성공)
-    survived_wrong = []   # 방어 후에도 오정정 (시행 번호 기록)
-    survived_detail = []  # 잔존 오정정 상세 (사다리 단계·정정 수)
+    blocked_wrong = 0     # legacy 오복호가었는데 방어 후 실패(차단 성공)
+    survived_wrong = []   # 방어 후에도 오복호 (시행 번호 기록)
+    survived_detail = []  # 잔존 오복호 상세 (사다리 단계·정정 수)
 
     t0 = time.time()
     for trial in range(n_trials):
@@ -102,7 +102,7 @@ def simulate_codeword_level(n_trials: int) -> dict:
                 res = None
                 outcomes[name] = 'fail'
             tally[name][outcomes[name]] += 1
-            # 방어 후 잔존 오정정은 메커니즘 분석을 위해 상세 기록
+            # 방어 후 잔존 오복호는 메커니즘 분석을 위해 상세 기록
             if name == 'defended' and outcomes[name] == 'wrong':
                 survived_detail.append(dict(
                     trial=trial, n_err=n_err,
@@ -214,7 +214,7 @@ def write_outputs(sim, rows, params, result):
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5))
 
-    cats = ['correct', 'wrong\n(오정정)', 'fail']
+    cats = ['correct', 'wrong\n(오복호)', 'fail']
     x = np.arange(3)
     w = 0.36
     lv_ = [tl['correct'], tl['wrong'], tl['fail']]
@@ -243,7 +243,7 @@ def write_outputs(sim, rows, params, result):
         if pts:
             ax2.scatter(*zip(*pts), color=color_map[outcome], zorder=2,
                         label=f'방어 전 fine {outcome}'
-                              + (' (침묵 오정정)' if outcome == 'wrong' else ''))
+                              + (' (미검출 오복호)' if outcome == 'wrong' else ''))
     ax2.axhline(FINE_GATE_THRESHOLD, color='navy', ls='--',
                 label=f'3층 게이트 임계 {FINE_GATE_THRESHOLD}')
     ax2.set_xlabel('GaussianBlur 반경 (px)')
@@ -264,14 +264,14 @@ def write_outputs(sim, rows, params, result):
     steps_before = ladder_steps(SIM_NSYM, cap=False)
     steps_after = ladder_steps(SIM_NSYM, cap=True)
     lines = [
-        "# exp12 침묵 오정정 3층 방어 — 검증 보고서",
+        "# exp12 미검출 오복호 3층 방어 — 검증 보고서",
         "",
         "## 방어 구성",
         "",
         f"- **1층 사다리 상한**: 최종 소거 단계 nsym → nsym-{LADDER_CAP_SLACK} "
         f"(예: nsym={SIM_NSYM} 사다리 {steps_before} → {steps_after}). "
         "풀소거(nsym)는 미지수=방정식이라 연립이 항상 풀려 비소거 위치의 "
-        "오류가 그대로 '성공'으로 통과하는 구조적 침묵 오정정 경로 — 이를 제거.",
+        "오류가 그대로 '성공'으로 통과하는 구조적 미검출 오복호 경로 — 이를 제거.",
         "- **2층 재인코딩 대조** (CRC 아님 — FTO 제약 3 준수): 복호 결과를 "
         "RSCodec으로 재인코딩해 수신 코드워드와 비교, 불일치 위치가 "
         "(소거 표시 ∪ RS 보고 정정 위치)를 벗어나면 실패 처리. 결정론적.",
@@ -294,18 +294,18 @@ def write_outputs(sim, rows, params, result):
         "|------|---------|------------------|",
         f"| 정상 복호 (correct) | {tl['correct']:,} ({tl['correct']/n:.1%}) "
         f"| {td['correct']:,} ({td['correct']/n:.1%}) |",
-        f"| **침묵 오정정 (wrong)** | **{tl['wrong']:,} ({tl['wrong']/n:.2%})** "
+        f"| **미검출 오복호 (wrong)** | **{tl['wrong']:,} ({tl['wrong']/n:.2%})** "
         f"| **{td['wrong']:,} ({td['wrong']/n:.2%})** |",
         f"| 실패 반환 (fail) | {tl['fail']:,} ({tl['fail']/n:.1%}) "
         f"| {td['fail']:,} ({td['fail']/n:.1%}) |",
         "",
-        f"- **오정정률 (전체 시행 대비)**: 방어 전 {rate(tl['wrong'])} → "
+        f"- **오복호율 (전체 시행 대비)**: 방어 전 {rate(tl['wrong'])} → "
         f"방어 후 {rate(td['wrong'])}",
-        f"- 오정정 차단: 방어 전 오정정 {tl['wrong']:,}건 중 "
+        f"- 오복호 차단: 방어 전 오복호 {tl['wrong']:,}건 중 "
         f"{sim['blocked_wrong']:,}건이 방어 후 실패(차단)로 전환",
         f"- **false reject (방어 비용)**: 방어 전 정상 복호였다가 방어 후 "
         f"실패로 바뀐 시행 {rate(sim['false_reject'])}",
-        f"- **신규 오정정 (방어가 만든 wrong)**: 방어 전 correct였다가 방어 후 "
+        f"- **신규 오복호 (방어가 만든 wrong)**: 방어 전 correct였다가 방어 후 "
         f"wrong이 된 시행 {rate(sim['cross'].get(('correct', 'wrong'), 0))}",
         f"- 소요 시간: {sim['elapsed']:.0f}s",
         "",
@@ -327,7 +327,7 @@ def write_outputs(sim, rows, params, result):
         n_err_min = min(d['n_err'] for d in det)
         n_err_max = max(d['n_err'] for d in det)
         lines += [
-            "### 잔존 오정정 분석 (방어 후에도 wrong)",
+            "### 잔존 오복호 분석 (방어 후에도 wrong)",
             "",
             f"- 발생 단계: 전부 소거 {rungs}개 단계 (사다리 최종 단계)",
             f"- 주입 오류 수 범위: {n_err_min}~{n_err_max}개 "
@@ -358,9 +358,9 @@ def write_outputs(sim, rows, params, result):
         "## ② 3층 게이트 캘리브레이션 (블러 스윕 실측)",
         "",
         f"- 마지막 정상 복호 vote 신뢰도 (blur 5.5px): **{last_ok_conf:.4f}**",
-        f"- 침묵 오정정 지점 vote 신뢰도 (blur {MISCORRECTION_BLUR}px): "
+        f"- 미검출 오복호 지점 vote 신뢰도 (blur {MISCORRECTION_BLUR}px): "
         f"**{mis_conf:.4f}**" if mis_conf is not None else
-        "- (이번 스윕에서 방어 전 오정정 미관측)",
+        "- (이번 스윕에서 방어 전 오복호 미관측)",
         f"- **임계값 = 중간값 {FINE_GATE_THRESHOLD}** "
         "(decoder_v12.FINE_GATE_THRESHOLD)",
         "",
@@ -369,15 +369,15 @@ def write_outputs(sim, rows, params, result):
         "절벽과 동근원 — t=0.5 외곽 샘플이 이웃 번짐을 흡수해 표가 안정적으로 "
         "갈라짐). 따라서 3층 게이트는 단독 방어가 아니며, 고원 구간에서 RS가 "
         "시도되더라도 1·2층이 결정론적으로 차단한다 (아래 표의 1+2층 열 참조). "
-        "게이트의 효용은 ⑴ 관측된 오정정 지점(6.0px)의 사전 차단과 "
+        "게이트의 효용은 ⑴ 관측된 오복호 지점(6.0px)의 사전 차단과 "
         "⑵ 저신뢰 구간에서 RS 시도 비용 절약이다.",
         "",
-        "## ③ 이미지 레벨 — blur 6.0px 침묵 오정정 케이스",
+        "## ③ 이미지 레벨 — blur 6.0px 미검출 오복호 케이스",
         "",
         f"| 단계 | blur {MISCORRECTION_BLUR}px 결과 |",
         "|------|------------------|",
         f"| 방어 전 (exp10 구동작) | **{blur6['legacy']}** "
-        f"{'← 침묵 오정정 재현' if blur6['legacy'] == 'wrong' else ''} |",
+        f"{'← 미검출 오복호 재현' if blur6['legacy'] == 'wrong' else ''} |",
         f"| 1+2층만 (게이트 무력화) | {blur6['layers12']} |",
         f"| 3층 전체 (v12) | {blur6['v12']} "
         f"(vote 신뢰도 {blur6['vote_conf']:.4f} < {FINE_GATE_THRESHOLD} → "
@@ -428,7 +428,7 @@ def main():
 
     blur6 = next(r for r in rows if r['blur'] == MISCORRECTION_BLUR)
     print("\n=== 요약 ===")
-    print(f"오정정률: 방어 전 {sim['tally']['legacy']['wrong']}/{args.n} → "
+    print(f"오복호율: 방어 전 {sim['tally']['legacy']['wrong']}/{args.n} → "
           f"방어 후 {sim['tally']['defended']['wrong']}/{args.n}")
     print(f"false reject (코드워드): {sim['false_reject']}/{args.n}")
     print(f"blur 6.0px: legacy={blur6['legacy']} → v12={blur6['v12']}")
