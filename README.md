@@ -35,3 +35,8 @@ python -m pytest tests/          # 왕복 테스트
 ## 상태
 
 활발히 실험 중인 연구 단계 (2026-06 기준 exp1~exp20 산출물 생성, 왕복 테스트 18종). 특허 FTO 분석(`concept/10_patent_fto.md`)을 코드 설계 제약에 반영해 진행 중.
+
+## 라이선스
+
+- 코드: [Apache-2.0](LICENSE). 파생물에는 저작권 고지와 [NOTICE](NOTICE)를 유지해야 한다.
+- 연구 문서(`concept/`)와 실험 보고서(`outputs/`의 마크다운): [CC BY 4.0](LICENSE-docs). 이용하려면 출처를 표시해야 한다.
