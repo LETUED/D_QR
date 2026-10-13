@@ -5,7 +5,7 @@ exp16 테스트 — 검출 파이프라인 v0 (임의 위치·회전·완만 원
 ① 파인더 후보 탐지: 합성 장면에서 단일 파인더(W·SE) 2개를 흰 링 검증으로
    정확 위치(±2px) 검출
 ② 어파인 정확도: 알려진 변환(회전·스케일·평행이동)을 적용한 장면에서 추정
-   사상이 세 파인더 중심을 ±1.5px로 사상
+   변환이 세 파인더 중심을 ±1.5px 이내로 대응시킴
 ③ 검출 왕복: 프로파일 A/B × {회전·스케일·오프셋·배경·원근} 표본 케이스
    에서 검출 디코딩 == 원본 (메타데이터 없는 임의 배치 PNG)
 ④ 거울상: 거울 입력 검출 디코딩 + detection.mirrored 플래그
@@ -134,7 +134,7 @@ def test_finder_candidates():
 
 
 def test_affine_accuracy():
-    """② 기지 변환(회전 50°+스케일 1.25+오프셋)에서 사상 오차 ≤1.5px."""
+    """② 알려진 변환(회전 50°+스케일 1.25+오프셋)에서 추정 변환의 오차 ≤1.5px."""
     _, result, img, info = make_code('A')
     angle, scale = 50.0, 1.25
     scene, (ox, oy) = make_scene(img, angle=angle, scale=scale,
@@ -158,7 +158,7 @@ def test_affine_accuracy():
         dx, dy = x * scale - w0 / 2, y * scale - h0 / 2
         tx = dx * math.cos(rad) + dy * math.sin(rad) + rw / 2 + ox
         ty = -dx * math.sin(rad) + dy * math.cos(rad) + rh / 2 + oy
-        # 추정 사상: 표준 공간(hex_size=1) 파인더 중심 → 이미지
+        # 추정 변환: 표준 공간(hex_size=1) 파인더 중심 → 이미지
         ex, ey = hyp['map_fn'](*axial_to_pixel(cq, cr, 1.0))
         errs.append(math.hypot(float(ex) - tx, float(ey) - ty))
     ok = max(errs) <= 1.5 and hyp['radius'] == result['radius']

@@ -77,10 +77,10 @@ class DQRDecoderV13:
         self.fallback_rings = tuple(fallback_rings) if fallback_rings else None
         self.use_sweep = use_sweep
         self.conf_fill = conf_fill
-        # exp16 검출 경로 훅: (xs, ys) → 이미지 좌표를 사상하는 외부 변환.
+        # exp16 검출 경로 훅: (xs, ys) → 이미지 좌표로 옮기는 외부 변환.
         # 검출 모듈이 추정한 어파인이 회전·거울상·스케일을 전부 흡수하므로
         # point_map이 있으면 내부 방향 가설은 항등 (0, False)만 검증한다.
-        # (좌표 사상만 주입 — 신뢰도·소거 판정 경로는 그대로 = FTO 분리 유지)
+        # (좌표 변환만 주입 — 신뢰도·소거 판정 경로는 그대로 = FTO 분리 유지)
         self.point_map = point_map
         self._coord_cache = {}
         self._group_cache = {}
@@ -120,7 +120,7 @@ class DQRDecoderV13:
         cells = [(q, r) for q, r, _ in pattern]
         expected = np.array([b for _, _, b in pattern])
         # point_map(검출 어파인)이 방향을 이미 흡수했으면 항등 가설만 검증
-        # (6가설 전부 같은 좌표로 사상되어 모호 판정이 무의미해지기 때문)
+        # (6가설 전부 같은 좌표로 변환되어 모호 판정이 무의미해지기 때문)
         hypotheses = ([(0, False)] if self.point_map is not None
                       else [(k, m) for m in (False, True) for k in (0, 1, 2)])
         matches = []

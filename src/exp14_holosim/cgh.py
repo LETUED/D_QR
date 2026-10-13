@@ -43,7 +43,7 @@ def embed_target(img_gray: np.ndarray, field_size: int = 2048,
 
 
 def conjugate_twin(arr: np.ndarray) -> np.ndarray:
-    """fftshift된 배열의 DC(N//2) 기준 점대칭 사상 — 켤레대칭 쌍둥이 위치."""
+    """fftshift된 배열의 DC(N//2) 기준 점대칭 변환 — 켤레대칭 쌍둥이 위치."""
     return np.roll(np.roll(arr[::-1, ::-1], 1, axis=0), 1, axis=1)
 
 
