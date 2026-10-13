@@ -3,7 +3,7 @@ exp16 검출 파이프라인 v0 — 임의 위치·임의 회전·완만 원근�
 D_QR을 찾아 exp13 자기기술 디코딩까지 연결.
 
 FTO: 본 모듈은 위치 추정 전용, 신뢰도·소거 판정과 무관.
-검출은 디코더에 "좌표 사상(point_map)" 하나만 주입한다 — 표 일치율,
+검출은 디코더에 "좌표 변환(point_map)" 하나만 주입한다 — 표 일치율,
 소거 사다리, 공간 스윕, 퇴화 가드 등 소거 판정 경로(decoder_v13 내부)는
 한 줄도 건드리지 않는다 (아키텍처 분리). 검출 실패는 명시적 예외
 DetectionError — 침묵 오정정 경로 없음 유지. 정밀화 스윕의 목적 함수도
@@ -148,7 +148,7 @@ def _cell_votes(gray, thr, tx, ty, n_cells):
 
 def _verify_map(gray, thr, geom, map_fn) -> tuple:
     """
-    가설 사상 검증 → (통과 여부, 표 마진 점수).
+    가설 변환 검증 → (통과 여부, 표 마진 점수).
       · 파인더 21셀: 다수결 '정확 일치' 필수, 마진 = 기대 방향 표 합
       · 콰이어트 링(R+1): 흰 다수결 셀 비율 ≥ QUIET_WHITE_MIN
         (렌더링 규약상 전부 비움 — 코드 내부에 들어앉은 가짜 기하를 기각)
@@ -171,14 +171,14 @@ def _verify_map(gray, thr, geom, map_fn) -> tuple:
 
 
 def _affine_point_map(M: np.ndarray):
-    """표준 공간(hex_size=1, origin=0) → 이미지 좌표 어파인 사상 클로저."""
+    """표준 공간(hex_size=1, origin=0) → 이미지 좌표 어파인 변환 클로저."""
     def map_fn(xs, ys):
         return apply_affine(M, xs, ys)
     return map_fn
 
 
 def _projective_map(M: np.ndarray, g: float, h: float):
-    """표준 공간 사영 왜곡(분모 1+g·x+h·y) 후 어파인 M — 합성 사상 클로저."""
+    """표준 공간 사영 왜곡(분모 1+g·x+h·y) 후 어파인 M — 합성 변환 클로저."""
     def map_fn(xs, ys):
         xs = np.asarray(xs, dtype=float)
         ys = np.asarray(ys, dtype=float)
@@ -266,7 +266,7 @@ def _sweep_perspective(gray, thr, geom, dst3, center=(0.0, 0.0),
     (center 주변 ±rng — 코스-투-파인 2차 패스에서 재사용).
 
     각 (g,h)에서 표준 대응점 3개를 사영 왜곡한 뒤 어파인을 재추정하면
-    합성 사상이 항상 3점 대응을 정확히 보간 → 남는 2자유도만 움직인다.
+    합성 변환이 항상 3점 대응을 정확히 보간 → 남는 2자유도만 움직인다.
     목적 함수 = 파인더 정렬 마진 + 콰이어트 링 흰 마진 (정수 표 합,
     중심 거리 오름차순·strict > 갱신 = 결정론, center 해를 기본 유지).
 
@@ -291,7 +291,7 @@ def _sweep_perspective(gray, thr, geom, dst3, center=(0.0, 0.0),
 
     offsets = _sorted_grid(rng, step) + np.array(center)           # K×2
 
-    # ── 전 (g,h) 일괄 평가 (K개 사상을 배치 선형대수로) ──────────────
+    # ── 전 (g,h) 일괄 평가 (K개 변환을 배치 선형대수로) ──────────────
     K = len(offsets)
     n_f, n_q = len(geom['expected']), geom['n_quiet']
     sx = np.concatenate([geom['fx'], geom['qx']])      # N (파인더+콰이어트)
@@ -310,7 +310,7 @@ def _sweep_perspective(gray, thr, geom, dst3, center=(0.0, 0.0),
     B[~det_ok] = np.eye(3)
     Mk = np.linalg.solve(B, np.broadcast_to(dst3, (K, 3, 2)))    # K×3×2
 
-    # 샘플점 사영 왜곡 후 일괄 사상 (K×N×2)
+    # 샘플점 사영 왜곡 후 일괄 변환 (K×N×2)
     d_s = 1.0 + g * sx[None, :] + h * sy[None, :]                # K×N
     Sw = np.stack([sx[None, :] / d_s, sy[None, :] / d_s,
                    np.ones_like(d_s)], axis=2)                   # K×N×3

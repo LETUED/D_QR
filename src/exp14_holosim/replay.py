@@ -31,7 +31,7 @@ def zoom_about_center(arr: np.ndarray, s: float) -> np.ndarray:
         return arr.copy()
     n_rows, n_cols = arr.shape
     cy, cx = n_rows // 2, n_cols // 2
-    # 출력 좌표 → 입력 좌표 역사상 (배율 s = 내용이 s배 확대)
+    # 출력 좌표 → 입력 좌표 역변환 (배율 s = 내용이 s배 확대)
     ys = (np.arange(n_rows) - cy) / s + cy
     xs = (np.arange(n_cols) - cx) / s + cx
 
