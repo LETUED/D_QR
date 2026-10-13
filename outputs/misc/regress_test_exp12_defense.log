@@ -1,8 +1,8 @@
 [테스트 ①] 1층 사다리 상한 (nsym → nsym-2) : PASS
 [테스트 ②] 2층 재인코딩 대조 : PASS (보고됨=True, 미보고 차단=True, 소거 허용=True)
-[테스트 ③] 풀소거 오정정 재현·차단 : PASS (구동작 오정정=True, 방어 후 차단=True)
+[테스트 ③] 풀소거 오복호 재현·차단 : PASS (구동작 오복호=True, 방어 후 차단=True)
 [테스트 ④] 3층 게이트 : PASS (클린 통과·복호=True, 블러 강등=True, 게이트 차단 경로=True)
-[테스트 ⑤] blur 6.0px 침묵 오정정 차단 : PASS (구동작 오정정 재현=True, 게이트 차단=True, 1+2층 차단=True)
+[테스트 ⑤] blur 6.0px 미검출 오복호 차단 : PASS (구동작 오복호 재현=True, 게이트 차단=True, 1+2층 차단=True)
 [테스트 ⑥] 회귀 test_exp9_roundtrip.py      : PASS
 [테스트 ⑥] 회귀 test_exp10_roundtrip.py     : PASS
 [테스트 ⑥] 회귀 test_exp11_roundtrip.py     : PASS

@@ -12,7 +12,7 @@ exp16은 1,400회 전부 이상적 기하 변환(회전·스케일·원근)만 �
 측정:
   검출률      = 기하 가설 ≥1건
   디코딩 성공 = 페이로드 == 원본
-  침묵 오정정 = 디코딩 반환했는데 페이로드 ≠ 원본 (0 유지 필수)
+  미검출 오복호 = 디코딩 반환했는데 페이로드 ≠ 원본 (0 유지 필수)
 
 FTO: 열화 모듈(src/exp17_physical)은 입력 생성 전용, 소거·신뢰도 판정과 무관.
 산출물: outputs/exp17/exp17_physical_chart.png, exp17_physical_report.md
@@ -73,7 +73,7 @@ def run_condition(img, data, label, degrade_kw, n=None):
             pass
     dt = (time.time() - t0) / n
     print(f"  {label:20s}: 검출 {det}/{n}, 성공 {ok}/{n}, "
-          f"침묵 오정정 {silent}, {dt * 1000:.0f}ms/회")
+          f"미검출 오복호 {silent}, {dt * 1000:.0f}ms/회")
     return {'label': label, 'n': n, 'detected': det, 'ok': ok,
             'silent': silent, 'ms': dt * 1000}
 
@@ -126,7 +126,7 @@ def main():
 
     total_n = sum(r['n'] for grp in res.values() for r in grp)
     total_silent = sum(r['silent'] for grp in res.values() for r in grp)
-    print(f"\n합계 {total_n}회, 침묵 오정정 {total_silent}건 "
+    print(f"\n합계 {total_n}회, 미검출 오복호 {total_silent}건 "
           f"({'PASS' if total_silent == 0 else 'FAIL — 0이어야 함'})")
 
     chart(res)
@@ -143,7 +143,7 @@ def chart(res):
 
     fig, axes = plt.subplots(2, 3, figsize=(16, 9))
     fig.suptitle("exp17 물리 카메라 열화 스윕 "
-                 f"(N={N_PER_COND}/조건, 회전 0~360°+원근 위에 열화, 침묵 오정정 0)",
+                 f"(N={N_PER_COND}/조건, 회전 0~360°+원근 위에 열화, 미검출 오복호 0)",
                  fontsize=13)
 
     def rates(grp):
@@ -210,7 +210,7 @@ def report(res, enc_result, total_n, total_silent):
         f"nsym={enc_result['nsym']}, 기준 hex_size={HEX_SIZE}px",
         f"- 조건당 N={N_PER_COND}, 시드 {SEED} 고정 (재현 가능), 총 {total_n}회",
         f"- 기하 배치: 회전 0~360° + 임의 오프셋 + 원근 0~8° **위에** 물리 열화 직렬 적용",
-        f"- **침묵 오정정: {total_silent}건** — 검출/복호 실패는 전부 명시적 예외",
+        f"- **미검출 오복호: {total_silent}건** — 검출/복호 실패는 전부 명시적 예외",
         "",
         "## 무엇을 시험했나 (exp16과의 차이)",
         "",
@@ -221,7 +221,7 @@ def report(res, enc_result, total_n, total_silent):
         "",
         "## 결과",
         "",
-        "| 조건 | 검출률 | 디코딩 성공률 | 침묵 오정정 |",
+        "| 조건 | 검출률 | 디코딩 성공률 | 미검출 오복호 |",
         "|------|--------|---------------|-------------|",
     ]
     group_titles = {
@@ -240,8 +240,8 @@ def report(res, enc_result, total_n, total_silent):
         "",
         "## 해석 (정직)",
         "",
-        "- **침묵 오정정 0 유지**: 모든 열화·강도에서 디코더가 틀린 데이터를 반환한 적 없음 "
-        "— 깨지면 명시적 실패(DetectionError/RS). 무오정정 정체성이 물리 열화에서도 보존.",
+        "- **미검출 오복호 0 유지**: 모든 열화·강도에서 디코더가 틀린 데이터를 반환한 적 없음 "
+        "— 깨지면 명시적 실패(DetectionError/RS). 무오복호 정체성이 물리 열화에서도 보존.",
         "- **강건 구간**: 약~중간 열화(mild/moderate 프리셋, 디포커스 ≤3px, 모션 ≤5px, "
         "JPEG ≥50, 렌즈 왜곡 전 범위)에서 검출·복호 높게 유지.",
         "- **붕괴 구간(정직 고지)**: 디포커스·모션이 파인더 흰 링과 (서브)삼각형 경계를 뭉개면 "

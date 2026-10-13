@@ -6,7 +6,7 @@ exp20 테스트 — 점진적 공개 게이트 FTO 이식 (밝기 마진 → 표
 ② 점진적 공개 × 물리 열화: 디포커스·노이즈 증가 시 fine이 coarse보다 먼저
    무너지고(우아한 강등 None), 둘 다 절대 틀린 데이터 반환 안 함 — 핵심 정체성
    "좋은 센서일수록 더 깊이 읽힌다"를 표 일치율(이산)로 구현했는지
-③ 침묵 오정정 0: ②의 전 열화 단계에서 반환값은 원본 일치 아니면 None/예외
+③ 미검출 오복호 0: ②의 전 열화 단계에서 반환값은 원본 일치 아니면 None/예외
 ④ 게이트 단조성: fine_consensus(표차 평균/N)가 열화 증가에 단조 감소 (센서 품질 추적)
 ⑤ FTO: decoder_v20 소스에 밝기 마진(reflectance/margin/128) 신뢰도 부재,
    DQRDecoderV9 마진 판독 경로 미사용, consensus(이산 표결) 사용
@@ -80,7 +80,7 @@ def _sweep(degrade_name, levels, degrade_fn):
 
 
 def test_progressive_and_silent():
-    """②③ 점진적 공개(fine이 coarse보다 먼저 강등) + 침묵 오정정 0."""
+    """②③ 점진적 공개(fine이 coarse보다 먼저 강등) + 미검출 오복호 0."""
     rows, silent = _sweep(
         "defocus", [0, 2, 4, 6, 8, 10, 12],
         lambda a, R, rng: defocus_blur(a, R) if R > 0 else a)
@@ -105,7 +105,7 @@ def test_progressive_and_silent():
         fs = 'OK' if fok else ('WRONG' if fdata is not None else 'None')
         print(f"          디포커스 R={lv:>2}: coarse {cs:>4}, fine {fs:>5}, "
               f"fine_consensus={cons:.3f}")
-    print(f"          → 침묵 오정정 {silent}건, fine 강등 발생={fine_collapsed}, "
+    print(f"          → 미검출 오복호 {silent}건, fine 강등 발생={fine_collapsed}, "
           f"강등 순서(fine 먼저)={order_ok}")
     return ok
 

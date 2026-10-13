@@ -9,21 +9,21 @@ RS 정정 한계: 2·오류 + 소거 ≤ nsym
 nsym/3 → 2nsym/3 → (nsym-2) 개씩 소거로 표시하며 재시도.
 (exp9 decoder_v9에서 도입 — exp10이 스트림별 게이트로 재사용하기 위해 추출)
 
-exp12 침묵 오정정 3층 방어 중 1·2층이 이 파일에 구현됨:
+exp12 미검출 오복호 3층 방어 중 1·2층이 이 파일에 구현됨:
 
   1층 — 사다리 상한 (nsym → nsym-2):
     소거를 nsym 전량까지 쓰면 미지수 nsym개 = 방정식 nsym개라 연립이
     항상 풀려 버려, 비소거 위치에 오류가 남아 있어도 '성공'을 반환한다
-    (exp10 blur 6.0px·exp11 프로파일 B 고오염에서 실측 관측된 침묵 오정정).
+    (exp10 blur 6.0px·exp11 프로파일 B 고오염에서 실측 관측된 미검출 오복호).
     최종 단계를 nsym-2로 제한해 검증 여력(신드롬 잉여) 최소 2심볼을 확보.
 
   2층 — 재인코딩 대조 (CRC 아님 — FTO 제약 3 준수):
     RS 복호 성공 후 복호 결과를 RSCodec으로 재인코딩해 수신 코드워드와
     바이트 단위 비교. 불일치 위치가 (소거 표시 위치 ∪ RS가 보고한 정정
-    위치)를 벗어나면 오정정으로 판정하고 해당 단계를 실패 처리. 결정론적.
+    위치)를 벗어나면 오복호로 판정하고 해당 단계를 실패 처리. 결정론적.
 
 exp11b 추가 — 결함③ 이중 방어 (budget=True):
-    exp12 잔존 오정정 84건의 단일 시그니처 = "최종 소거 단계(소거 49)에서
+    exp12 잔존 오복호 84건의 단일 시그니처 = "최종 소거 단계(소거 49)에서
     BM 오류 탐색이 신드롬 여력을 재소진(보고 정정 수 52~65 > 소거 49)".
 
   3-a 청크별 errata 예산 검사 (chunk_errata_budget_ok):
@@ -34,7 +34,7 @@ exp11b 추가 — 결함③ 이중 방어 (budget=True):
     평탄 연결의 모호성을 우회. slack 인자로 nsym-2(엄격)도 선택 가능.
 
 exp15b 추가 — 4층: 퇴화 코드워드 가드 (reject_degenerate):
-    exp15 기준선 비교에서 관측된 D_QR 유일의 침묵 오정정 7건은 전부
+    exp15 기준선 비교에서 관측된 D_QR 유일의 미검출 오복호 7건은 전부
     "전부-0 코드워드 퇴화" 단일 모드였다 — RS 부호는 선형이라 전부-0은
     항상 유효 코드워드이고, 재인코딩 대조(2층)도 encode(0…0)=0…0이라
     통과한다. 군집 블롯이 심볼 대부분을 덮으면 판독 코드워드가 전부-0
@@ -49,7 +49,7 @@ exp15b 추가 — 4층: 퇴화 코드워드 가드 (reject_degenerate):
     기본값 False — exp9~12 산출물 동결 보존, v11b·v13만 True로 활성.
 
   3-b 최종 단계 순수 소거 복호 (only_erasures):
-    이미지 실측에서 관측된 사다리 오정정은 전부 "최종 단계(nsym-2 소거)
+    이미지 실측에서 관측된 사다리 오복호는 전부 "최종 단계(nsym-2 소거)
     + BM 오류 1개 = 2e+s가 정확히 nsym"의 형태였다(exp11b 진단).
     최종 단계에서 BM 오류 탐색 자체를 끄면(순수 소거 복호) 신드롬 여력
     2심볼이 온전히 검증에 쓰여 이 경로가 기계적으로 차단된다. 반면
@@ -83,7 +83,7 @@ def is_degenerate_message(msg: bytes) -> bool:
     4층 가드 판정: 메시지가 전부-0 또는 상수(모든 바이트 동일)인가.
 
     전부-0 메시지 ⟺ 전부-0 코드워드 (RS 인코딩은 선형·계통적) — exp15에서
-    실측된 침묵 오정정의 유일 모드. 상수 메시지도 함께 거부한다 — 정상
+    실측된 미검출 오복호의 유일 모드. 상수 메시지도 함께 거부한다 — 정상
     페이로드가 상수가 되는 경우는 구조적으로 없으며(스크램블 시 보증),
     같은 계열의 퇴화 흡인자를 보수적으로 차단한다. 결정론적이고 검출
     잉여(체크섬)를 쓰지 않으므로 CRC 아님 (FTO 제약 3 무관).
@@ -98,7 +98,7 @@ def reencode_mismatch_ok(rsc: RSCodec, codeword: bytes, decoded_msg: bytes,
 
     수신 코드워드와 재인코딩 코드워드의 불일치 위치 전부가
     (소거 표시 위치 ∪ RS 보고 정정 위치) 안에 들어야 정상 복호.
-    벗어나는 불일치가 하나라도 있으면 오정정 의심 → False.
+    벗어나는 불일치가 하나라도 있으면 오복호 의심 → False.
 
     주의: reedsolo는 255바이트 초과 코드워드를 청크로 나눠 복호하며
     errata_pos를 '청크 상대 위치'로 평탄 연결해 반환한다(전역 오프셋 없음).
@@ -117,7 +117,7 @@ def reencode_mismatch_ok(rsc: RSCodec, codeword: bytes, decoded_msg: bytes,
             continue
         if g in erase_set or (g % nsize) in errata_rel:
             continue
-        return False  # 보고되지 않은 위치가 바뀜 → 오정정
+        return False  # 보고되지 않은 위치가 바뀜 → 오복호
     return True
 
 
@@ -210,7 +210,7 @@ def erasure_ladder_decode(codeword: bytes, byte_conf: list,
         if verify and not reencode_mismatch_ok(rsc, codeword, bytes(decoded),
                                                erase, errata):
             last_err = ReedSolomonError(
-                f"재인코딩 대조 불일치 (소거 {k}개 단계) — 오정정 차단")
+                f"재인코딩 대조 불일치 (소거 {k}개 단계) — 오복호 차단")
             continue
         if budget and not chunk_errata_budget_ok(rsc, codeword,
                                                  bytes(decoded), erase,

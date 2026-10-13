@@ -10,8 +10,8 @@ exp16 테스트 — 검출 파이프라인 v0 (임의 위치·회전·완만 원
    에서 검출 디코딩 == 원본 (메타데이터 없는 임의 배치 PNG)
 ④ 거울상: 거울 입력 검출 디코딩 + detection.mirrored 플래그
 ⑤ 명시적 실패: 코드 없는 이미지(빈/잡음/블롭), 파인더 가림 → 예외
-   (침묵 오정정 경로 없음)
-⑥ 침묵 오정정 0: ③·④ 전 케이스에서 성공 시 페이로드 일치 단언 (집계 재확인)
+   (미검출 오복호 경로 없음)
+⑥ 미검출 오복호 0: ③·④ 전 케이스에서 성공 시 페이로드 일치 단언 (집계 재확인)
 ⑦ 아키텍처 분리 (FTO): src/exp16_detect/*가 소거·신뢰도 경로
    (softdecode·spatial·consensus 등)를 임포트하지 않음을 소스 검사로 단언
 ⑧ 회귀: test_exp13_selfdesc.py 전체 PASS (decoder_v13 훅 추가가 기존
@@ -183,7 +183,7 @@ ROUNDTRIP_CASES = [
 
 
 def test_detect_roundtrip():
-    """③+⑥ 임의 배치 왕복 — 성공 시 페이로드 일치(침묵 오정정 0) 단언."""
+    """③+⑥ 임의 배치 왕복 — 성공 시 페이로드 일치(미검출 오복호 0) 단언."""
     OUT.mkdir(parents=True, exist_ok=True)
     ok = True
     for profile in ('A', 'B'):
@@ -195,11 +195,11 @@ def test_detect_roundtrip():
             try:
                 s = detect_and_decode(loaded)
                 good = s['data'] == data
-                silent = not good     # 디코딩됐는데 불일치 = 침묵 오정정
+                silent = not good     # 디코딩됐는데 불일치 = 미검출 오복호
             except Exception as e:
                 good, silent = False, False
                 s = {'mode': f"EXC:{type(e).__name__}"}
-            assert not silent, f"침묵 오정정 발생: {profile} {name}"
+            assert not silent, f"미검출 오복호 발생: {profile} {name}"
             ok &= good
             print(f"[테스트 ③] 왕복 {profile} {name:14s}: "
                   f"{'PASS' if good else 'FAIL'} (mode={s.get('mode')})")

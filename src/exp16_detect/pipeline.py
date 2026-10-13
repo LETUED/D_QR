@@ -6,7 +6,7 @@ FTO: 본 모듈은 위치 추정 전용, 신뢰도·소거 판정과 무관.
 검출은 디코더에 "좌표 변환(point_map)" 하나만 주입한다 — 표 일치율,
 소거 사다리, 공간 스윕, 퇴화 가드 등 소거 판정 경로(decoder_v13 내부)는
 한 줄도 건드리지 않는다 (아키텍처 분리). 검출 실패는 명시적 예외
-DetectionError — 침묵 오정정 경로 없음 유지. 정밀화 스윕의 목적 함수도
+DetectionError — 미검출 오복호 경로 없음 유지. 정밀화 스윕의 목적 함수도
 이산 표 마진(정수 합)만 사용, ML·연속 밝기량 불사용.
 
 단계:
@@ -59,7 +59,7 @@ N_VERIFY = 1 + 6 * len(VERIFY_RINGS)   # 셀당 검증 샘플 수 = 13
 
 
 class DetectionError(ValueError):
-    """검출 실패 — 명시적 예외 (침묵 오정정 경로 없음)."""
+    """검출 실패 — 명시적 예외 (미검출 오복호 경로 없음)."""
 
 
 def _sorted_grid(rng: float, step: float) -> np.ndarray:
@@ -434,7 +434,7 @@ def detect_and_decode(image, hyps: list = None, **decoder_kwargs) -> dict:
     # 표 마진 점수 내림차순으로 본 디코딩 — 첫 성공 채택.
     # 틀린 기하 가설의 차단은 디코더 자체의 가드가 담당한다 (포맷 링
     # radius 대조, RS, 길이 프리픽스, 퇴화 코드워드 가드 — exp15b에서
-    # 침묵 오정정 0 실측). 검출은 후보 순서만 정하고 판정에 관여하지 않음.
+    # 미검출 오복호 0 실측). 검출은 후보 순서만 정하고 판정에 관여하지 않음.
     last_err = None
     for hyp in hyps:
         dec = DQRDecoderV13(point_map=hyp['map_fn'], **decoder_kwargs)

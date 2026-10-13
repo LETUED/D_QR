@@ -2,7 +2,7 @@
 
 - coarse 73B / fine 146B, r=12, hex_size=24px, N=30/조건, 시드 20020, 총 630회
 - 게이트 = 표 일치율(fine 표차 평균/N, 이산) — 밝기 마진 아님 (decoder_v20, FTO)
-- **침묵 오정정 0건** · 점진적 공개(fine이 coarse보다 먼저 강등) 관측=True
+- **미검출 오복호 0건** · 점진적 공개(fine이 coarse보다 먼저 강등) 관측=True
 
 ## 결과 (coarse 복호율 / fine 복호율 / fine 게이트)
 
@@ -34,7 +34,7 @@
 
 - **점진적 공개 실증**: 열화(센서 품질↓)가 커지면 fine이 coarse보다 먼저 무너진다 — coarse는 6bit/셀·ECC30%로 더 튼튼, fine은 12bit/셀·ECC20%로 더 예민. 좋은 센서=둘 다, 나쁜 센서=coarse만 → 헤드라인 정체성 그대로.
 - **게이트가 센서 품질을 추적**: fine 게이트(표차/N)가 열화에 따라 내려가며 fine 복호율과 동행 — 표 일치율(이산)이 밝기 마진을 대체.
-- **무오정정 보존**: 전 구간 침묵 오정정 0 — coarse는 틀린 데이터 반환 0, fine은 None 우아한 강등(틀린 fine 반환 0).
+- **무오복호 보존**: 전 구간 미검출 오복호 0 — coarse는 틀린 데이터 반환 0, fine은 None 우아한 강등(틀린 fine 반환 0).
 - **FTO**: 신뢰도·게이트에 reflectance/contrast/erasure-gap 계열 양 불사용 (Honeywell 회피). exp10 마진 게이트는 동결, 본 exp20이 출원·공개 경로.
 
 *디코더: src/exp20_consensus_gate/decoder_v20.py · 열화: src/exp17_physical/degrade.py*

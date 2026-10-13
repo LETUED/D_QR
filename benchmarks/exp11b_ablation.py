@@ -12,7 +12,7 @@ exp11 중단규칙 3대 결함의 해소(v11b)를 검증한다:
   결함② 블러 9.5px 절벽     → 내부 링 폴백 패스 (t≤0.3)
   결함③ 청크 errata 예산    → 예산 검사 + 최종 단계 순수 소거 복호
 
-추가로 침묵 오정정(성공 반환했으나 원본 불일치)을 세 디코더 모두에서
+추가로 미검출 오복호(성공 반환했으나 원본 불일치)을 세 디코더 모두에서
 계수한다 — exp11은 이를 측정하지 않았으나 v11b 방어 설계의 핵심 지표다.
 
 코드워드 스트레스 시뮬은 exp12와 완전 동일 조건(N=10,000, seed=42,
@@ -58,7 +58,7 @@ DECODERS = ('margin', 'vote', 'v11b')
 TARGET_PATCH_LOSS_PP = 10.0   # ① 패치: v11b가 margin 대비 -10%p 이내
 TARGET_NOISE_S135 = 90.0      # ② 노이즈: σ135에서 압승 유지(margin은 0~수%)
 TARGET_BLUR_LOSS_PP = 4.0     # ③ 블러 9.5px margin과 동등 (50회 중 2회 여유)
-TARGET_SIM_WRONG = 9          # ④ 코드워드 시뮬 잔존 오정정 0~한 자릿수
+TARGET_SIM_WRONG = 9          # ④ 코드워드 시뮬 잔존 오복호 0~한 자릿수
 
 
 def build_decoders():
@@ -70,7 +70,7 @@ def build_decoders():
 
 
 def outcome(dec, img, params, data):
-    """'ok' | 'wrong'(침묵 오정정) | 'fail'."""
+    """'ok' | 'wrong'(미검출 오복호) | 'fail'."""
     try:
         out = dec.decode_with_stats(img, **params)['data']
         return 'ok' if out == data else 'wrong'
@@ -94,7 +94,7 @@ def run_bench(sweep, profile):
     decs = build_decoders()
 
     rates = {d: [] for d in DECODERS}        # 성공률 %
-    wrongs = {d: [] for d in DECODERS}       # 침묵 오정정 건수
+    wrongs = {d: [] for d in DECODERS}       # 미검출 오복호 건수
     for lv in cfg['levels']:
         cnt = {d: {'ok': 0, 'wrong': 0, 'fail': 0} for d in DECODERS}
         for t in range(TRIALS):
@@ -278,7 +278,7 @@ def finalize():
         ax.grid(alpha=0.3)
         ax.legend(fontsize=8)
 
-    # 마지막 패널: 코드워드 시뮬 오정정 비교
+    # 마지막 패널: 코드워드 시뮬 오복호 비교
     ax = flat[len(BENCHES)]
     names = list(SIM_CONFIGS)
     ws = [sim['tally'][k]['wrong'] for k in names]
@@ -287,9 +287,9 @@ def finalize():
     for b, w in zip(bars, ws):
         ax.text(b.get_x() + b.get_width() / 2, b.get_height() + 2, str(w),
                 ha='center', fontsize=10)
-    ax.set_title(f'코드워드 시뮬 침묵 오정정 (N={sim["n_trials"]:,}, '
+    ax.set_title(f'코드워드 시뮬 미검출 오복호 (N={sim["n_trials"]:,}, '
                  f'exp12 동일 조건)')
-    ax.set_ylabel('오정정 건수')
+    ax.set_ylabel('오복호 건수')
     ax.grid(alpha=0.3, axis='y')
 
     fig.suptitle('exp11b ablation: margin(v9) vs vote(v11) vs v11b — '
@@ -314,7 +314,7 @@ def finalize():
         "- vote = exp11 decoder_v11 (표 일치율, N=9)",
         "- v11b = exp11b decoder_v11b: 결함① 공간 소거 스윕+합의 수락 / "
         "결함② 내부 링 폴백 패스 / 결함③ errata 예산+최종 단계 순수 소거",
-        "- W(n) = 침묵 오정정 n건 (성공 반환했으나 원본 불일치 — exp11은 미측정)",
+        "- W(n) = 미검출 오복호 n건 (성공 반환했으나 원본 불일치 — exp11은 미측정)",
         "",
         "## 검증 목표 판정",
         "",
@@ -334,7 +334,7 @@ def finalize():
         f"{targets['blur']['v11b_9_5']:.0f}% "
         f"(손실 {targets['blur']['loss_at_9_5_pp']:.0f}%p) "
         f"| {mark(targets['blur']['pass'])} |",
-        f"| ④ 코드워드 오정정 일소 | 84 → 한 자릿수 "
+        f"| ④ 코드워드 오복호 일소 | 84 → 한 자릿수 "
         f"| defended {targets['codeword']['defended_wrong']} → v11b "
         f"**{targets['codeword']['v11b_wrong']}** "
         f"| {mark(targets['codeword']['pass'])} |",
@@ -355,14 +355,14 @@ def finalize():
         "",
         "**대신 v11b가 얻은 것:**",
         "",
-        "1. **침묵 오정정 전멸 (이미지+코드워드 양쪽).** 아래 총계표 참조 — "
-        "margin은 전 벤치마크에서 성공 반환의 탈을 쓴 오정정을 "
+        "1. **미검출 오복호 전멸 (이미지+코드워드 양쪽).** 아래 총계표 참조 — "
+        "margin은 전 벤치마크에서 성공 반환의 탈을 쓴 오복호를 "
         "대량으로 낸다 (B 노이즈 σ125에서 50회 중 19회!). vote도 패치 "
         "고오염에서 다수 발생. v11b는 전 구간 0건. '성공률' 비교는 이 "
         "비용을 숨기므로 margin의 패치 우위는 액면 그대로 읽으면 안 된다.",
         "2. **군집 오염 복구 (결함① 설계 시나리오).** 산포 패치와 달리 "
         "공간적으로 뭉친 오염(tests/test_exp11b.py ⑤: 360px 균일 블롯)은 "
-        "v11이 침묵 오정정(A) 또는 실패(B)하는 반면 v11b 공간 스윕이 "
+        "v11이 미검출 오복호(A) 또는 실패(B)하는 반면 v11b 공간 스윕이 "
         "합의 4~5건으로 정확 복구한다.",
         "3. **블러 절벽 해소 + 노이즈 압승 유지** (목표 ②③ 달성).",
         "4. **산포 패치에서도 성공률은 vote와 동등** (열화 없음) — 격차는 "
@@ -373,9 +373,9 @@ def finalize():
         "",
         f"- 구성: nsym={SIM_NSYM}, data {SIM_DATA_LEN}B, 오류 "
         f"{SIM_ERR_RANGE[0]}~{SIM_ERR_RANGE[1]-1}개, 신뢰도 모델 exp12와 동일",
-        "- 'defended' 열이 exp12 보고서의 잔존 오정정을 재현해야 동일 조건 입증",
+        "- 'defended' 열이 exp12 보고서의 잔존 오복호를 재현해야 동일 조건 입증",
         "",
-        "| 구성 | correct | wrong (오정정) | fail | false reject(vs legacy) |",
+        "| 구성 | correct | wrong (오복호) | fail | false reject(vs legacy) |",
         "|------|---------|----------------|------|------------------------|",
     ]
     for k in SIM_CONFIGS:
@@ -388,7 +388,7 @@ def finalize():
         "- v11b 결함③ = 청크별 2·오류+소거 ≤ nsym 예산 검사(3-a) + 최종 소거 "
         "단계 BM 오류 탐색 금지(3-b, only_erasures). exp12 잔존 시그니처 "
         "('최종 단계 소거 49 + BM 재소진')를 직격한다.",
-        "- strict_s2(예산 nsym-2 일괄)는 비교군 — 오정정은 같게 잡지만 중간 "
+        "- strict_s2(예산 nsym-2 일괄)는 비교군 — 오복호는 같게 잡지만 중간 "
         "단계의 정상 대량 BM 정정(예: 소거 50+오류 13)까지 거부해 이미지 "
         "레벨 성공률을 잃는다 (패치 A90에서 -30%p 실측).",
         "",
@@ -419,17 +419,17 @@ def finalize():
                          f"{fmt(dm)} | {fmt(dv)} |")
         lines.append("")
 
-    # 침묵 오정정 총계 (이미지 레벨)
+    # 미검출 오복호 총계 (이미지 레벨)
     tot_w = {d: sum(sum(wrongs[b][d]) for b in BENCHES) for d in DECODERS}
     n_imgs = len(BENCHES) * 8 * TRIALS
     lines += [
-        "## 침묵 오정정 총계 (이미지 레벨, 전 벤치마크 합산)",
+        "## 미검출 오복호 총계 (이미지 레벨, 전 벤치마크 합산)",
         "",
-        f"| 디코더 | 오정정 건수 / {n_imgs:,} 이미지 |",
+        f"| 디코더 | 오복호 건수 / {n_imgs:,} 이미지 |",
         "|--------|------------------------|",
     ] + [f"| {d} | **{tot_w[d]}** |" for d in DECODERS] + [
         "",
-        "v11b는 성공률을 유지하면서 이미지 레벨 침묵 오정정을 제거하는 것이 "
+        "v11b는 성공률을 유지하면서 이미지 레벨 미검출 오복호를 제거하는 것이 "
         "설계 목표 — margin·vote의 W 건수와 비교할 것.",
         "",
         "## FTO 준수 확인",

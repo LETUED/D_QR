@@ -5,7 +5,7 @@ exp20 — 점진적 공개 × 물리 열화 스윕 (표 일치율 게이트 통�
 통계적으로 검증한다. 열화(센서 품질 저하)가 커질수록:
   · coarse(코어)는 오래 생존
   · fine(확장)은 먼저 무너짐(우아한 강등 None) — '점진적 공개'
-  · 전 구간 침묵 오정정 0 (coarse 절대 오답 없음)
+  · 전 구간 미검출 오복호 0 (coarse 절대 오답 없음)
 게이트는 밝기 마진이 아닌 표 일치율(이산 표차)이다 (decoder_v20, FTO).
 
 본 스윕은 게이트 거동 분리 측정 — 알려진 기하(렌더 좌표)에 열화만 적용
@@ -109,7 +109,7 @@ def main():
     total_silent = sum(r['silent'] for g in res_groups.values() for r in g)
     # 점진적 공개 성립 = 어느 축이든 fine이 coarse보다 먼저 무너지는 구간 존재
     prog = any(r['fine'] < r['coarse'] for g in res_groups.values() for r in g)
-    print(f"\n합계 {total_n}회, 침묵 오정정 {total_silent}건 "
+    print(f"\n합계 {total_n}회, 미검출 오복호 {total_silent}건 "
           f"({'PASS' if total_silent == 0 else 'FAIL'}), "
           f"점진적 공개(fine이 먼저 강등) 관측={prog}")
 
@@ -161,7 +161,7 @@ def report(res_groups, enc_res, total_n, total_silent, prog):
         f"- coarse {len(COARSE)}B / fine {len(FINE)}B, r={enc_res['radius']}, "
         f"hex_size={HEX_SIZE}px, N={N_PER_COND}/조건, 시드 {SEED}, 총 {total_n}회",
         f"- 게이트 = 표 일치율(fine 표차 평균/N, 이산) — 밝기 마진 아님 (decoder_v20, FTO)",
-        f"- **침묵 오정정 {total_silent}건** · 점진적 공개(fine이 coarse보다 먼저 강등) 관측={prog}",
+        f"- **미검출 오복호 {total_silent}건** · 점진적 공개(fine이 coarse보다 먼저 강등) 관측={prog}",
         "",
         "## 결과 (coarse 복호율 / fine 복호율 / fine 게이트)",
         "",
@@ -183,7 +183,7 @@ def report(res_groups, enc_res, total_n, total_silent, prog):
         "좋은 센서=둘 다, 나쁜 센서=coarse만 → 헤드라인 정체성 그대로.",
         "- **게이트가 센서 품질을 추적**: fine 게이트(표차/N)가 열화에 따라 내려가며 "
         "fine 복호율과 동행 — 표 일치율(이산)이 밝기 마진을 대체.",
-        "- **무오정정 보존**: 전 구간 침묵 오정정 0 — coarse는 틀린 데이터 반환 0, "
+        "- **무오복호 보존**: 전 구간 미검출 오복호 0 — coarse는 틀린 데이터 반환 0, "
         "fine은 None 우아한 강등(틀린 fine 반환 0).",
         "- **FTO**: 신뢰도·게이트에 reflectance/contrast/erasure-gap 계열 양 불사용 "
         "(Honeywell 회피). exp10 마진 게이트는 동결, 본 exp20이 출원·공개 경로.",

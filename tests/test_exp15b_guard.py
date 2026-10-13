@@ -5,14 +5,14 @@ exp15b 테스트 — 전부-0 코드워드 퇴화 봉쇄 (4층 가드 + 인코�
 ① 가드 판정 단위: is_degenerate_message — 전부-0/상수 거부, 정상 통과
 ② 코드워드 레벨: 전부-0 코드워드를 사다리가 reject_degenerate=True에서
    거부, False(exp9~12 동결 기본값)에서는 종전대로 반환
-③ exp15 실측 오정정 재현: outputs/exp15/exp15_wrong_blot2_trial8.png —
-   가드 해제 시 전부-0 페이로드 오정정 재현(mode=soft, 소거 25, errata 48),
+③ exp15 실측 오복호 재현: outputs/exp15/exp15_wrong_blot2_trial8.png —
+   가드 해제 시 전부-0 페이로드 오복호 재현(mode=soft, 소거 25, errata 48),
    가드 적용(v11b 기본) 시 명시적 거부
 ④ 스크램블 단위: LFSR 마스크 결정론·자기 역원·전 바이트 비0·전 주기 비상수
    (CRC 아님 — 검출 기능 없는 전단사 변환)
 ⑤ v13 왕복: scramble on(기본)/off × 일반·0 위주·빈 페이로드 + 포맷 링
    scramble 비트 기록 검증. 빈 페이로드 + scramble off = 전부-0 메시지는
-   가드의 명시적 거부(침묵 오정정 아님)가 올바른 동작임을 문서화
+   가드의 명시적 거부(미검출 오복호 아님)가 올바른 동작임을 문서화
 ⑥ v9 경로 스크램블 왕복: encoder_v9(scramble=True) + v11b(descramble=True),
    기본(off) 경로 동작 불변 확인
 ⑦ 가드 무해성: 정상 페이로드의 깨끗한/열화 이미지 복호에 가드가 영향 없음
@@ -92,7 +92,7 @@ def test_ladder_guard_codeword_level():
 
 
 def test_exp15_wrong_case_rejected():
-    """③ exp15 blot=2 시행 8 실측 오정정 — 가드 전 재현 / 가드 후 거부."""
+    """③ exp15 blot=2 시행 8 실측 오복호 — 가드 전 재현 / 가드 후 거부."""
     if not WRONG_PNG.exists():
         print(f"[테스트 ③] SKIP — 증거 이미지 없음: {WRONG_PNG}")
         return True
@@ -100,7 +100,7 @@ def test_exp15_wrong_case_rejected():
     sym = build_dqr()
     img = Image.open(WRONG_PNG)
 
-    # 가드 해제 — 종전 침묵 오정정(전부-0, mode=soft) 그대로 재현돼야
+    # 가드 해제 — 종전 미검출 오복호(전부-0, mode=soft) 그대로 재현돼야
     # '같은 사례를 막았다'는 주장이 성립한다
     dec_off = DQRDecoderV11B(reject_degenerate=False)
     try:

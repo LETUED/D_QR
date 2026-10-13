@@ -417,10 +417,10 @@ def run_exp11b():
     # 핵심 수치 출처: outputs/exp11b/exp11b_ablation_summary.json (3자 비교)
     metrics = [
         "3층 해소: ①공간 소거 스윕+합의 수락(만장일치-오류) ②내부 링 폴백 t≤0.3(블러 절벽) "
-        "③청크 errata 예산+최종 단계 순수 소거(잔존 오정정 84건 시그니처)",
+        "③청크 errata 예산+최종 단계 순수 소거(잔존 오복호 84건 시그니처)",
         f"ECC {cap['ecc_rate']*100:.0f}% (nsym={result['nsym']}) — 인코딩은 exp9 그대로, 디코더만 v11b",
         "3자 비교(밝기 마진/표결 v11/v11b): 노이즈 σ135 → 0%/100%/100% · 블러 9.5px → 100%/0%/100%",
-        "오정정: 이미지 실측 합계 176/82/0건, 코드워드 시뮬 1만 회 237→84(exp12 방어)→0건 — false reject 0",
+        "오복호: 이미지 실측 합계 176/82/0건, 코드워드 시뮬 1만 회 237→84(exp12 방어)→0건 — false reject 0",
         "잔존 한계(정직 고지): 균일 패치 일치율은 margin 대비 최대 A 28%p / B 44%p 열세 — FTO 1 준수의 구조적 비용",
     ]
     return metrics, [
@@ -562,7 +562,7 @@ def run_exp16():
         "디코딩 = decoder_v13에 좌표 변환만 주입 — 포맷 링 대조·3층 방어·소거 사다리·"
         "퇴화 가드 등 판정 경로 무수정 (아키텍처 분리)",
         "스윕 1,400회(조건 28×N=50): 회전 0~360°·스케일 0.5~2×·원근 ≤20° 100% 검출·복호, "
-        "원근 25°/30°는 우아한 저하(검출 92%/84%) — 전 구간 침묵 오정정 0건",
+        "원근 25°/30°는 우아한 저하(검출 92%/84%) — 전 구간 미검출 오복호 0건",
         "v1(exp18): 쌍 순위를 격자 반경 스냅(이산 기하)으로 보강 — 모션 블러·글레어 강건성 향상, "
         "기하 스윕 회귀 없음. 잔여 v1 과제: 손촬영·복잡 배경·심한 원근>20°",
     ]
@@ -622,7 +622,7 @@ def run_exp17():
         "물리 발생 순서로 직렬 적용: 인쇄 → 광학 → 센서 → 저장. 회전 0~360°+원근 배치 위에 입힘",
         "검출 스윕(조건 32×N=50, exp18 v1 적용): 디포커스 R6·노이즈 전ISO·JPEG QF30·비네팅·"
         "렌즈왜곡·모션 L5 100%, 모션 L9 96%·글레어 100% — severe 다중중첩만 v0 범위 밖, "
-        "전 구간 침묵 오정정 0건",
+        "전 구간 미검출 오복호 0건",
         "exp18 검출 v1: 모션 진단(가짜 파인더 폭증→쌍 상한 포화)을 격자 반경 스냅 순위로 해소 "
         "— 모션 L9 검출 57→96%, 글레어 90→100% (이산 기하 판별, 밝기량 아님)",
         "FTO: 열화 모듈은 입력 생성 전용 — 소거·신뢰도 판정 경로(softdecode·spatial·consensus) "
@@ -678,7 +678,7 @@ def run_exp20():
         f"좋은 센서(클린): coarse+fine 둘 다 복호 (fine_consensus={clean['fine_consensus']:.3f}) · "
         f"나쁜 센서(디포커스 R8): coarse만 생존, fine 게이트 차단(None, consensus={deg['fine_consensus']:.3f})",
         "= 헤드라인 정체성 '좋은 센서일수록 더 깊이 읽힌다'를 밝기 마진 없이 구현 · "
-        "전 단계 침묵 오정정 0(coarse 절대 오답 없음, fine은 우아한 강등)",
+        "전 단계 미검출 오복호 0(coarse 절대 오답 없음, fine은 우아한 강등)",
     ]
     return metrics, [
         text_demo("coarse — 코어 텍스트 (저해상·열화 생존)", STANDARD_BYTES, path,
@@ -822,7 +822,7 @@ def run_exp15():
             cols.append({"header": SYM_LABELS[k], "file": None, "ok": False,
                          "sub": "비교 불가 — 생성/판독 라이브러리 실패"})
 
-    # 비교표: 총괄(성공/오정정/거부) + 대표 조건별 성공률
+    # 비교표: 총괄(성공/오복호/거부) + 대표 조건별 성공률
     tot = summary["totals"]
     conds = summary["conditions"]
     n_cond = summary["trials_per_condition"]
@@ -844,7 +844,7 @@ def run_exp15():
         rows.append("<tr>" + "".join(cells) + "</tr>")
     table_html = (
         '<table class="timeline" style="margin:14px 0 0">'
-        "<tr><th>심볼로지</th><th>성공 (전 조건)</th><th>침묵 오정정</th>"
+        "<tr><th>심볼로지</th><th>성공 (전 조건)</th><th>미검출 오복호</th>"
         "<th>거부</th>"
         + "".join(f"<th>{esc(lbl)}</th>" for _, lbl in picks)
         + "</tr>" + "".join(rows) + "</table>")
@@ -853,7 +853,7 @@ def run_exp15():
     ecc_line = " / ".join(
         f"{SYM_LABELS[k]} {summary['meta'][k].get('ecc_share', '?')}%"
         for k in order)
-    w_line = (f"침묵 오정정(핵심 지표): "
+    w_line = (f"미검출 오복호(핵심 지표): "
               + " / ".join(f"{SYM_LABELS[k]} {tot[k]['wrong']}건" for k in order))
     if w_dqr:
         w_line += (f" — D_QR {w_dqr}건은 전부-0 코드워드 퇴화 단일 모드"
@@ -868,8 +868,8 @@ def run_exp15():
         ok_delta = sum(v["ok_delta"] for v in b["blot"].values())
         guard_line = (
             f"exp15b 4층 가드(softdecode.is_degenerate_message — 전부-0/상수 메시지 결정론 거부, "
-            f"CRC 아님)로 봉쇄: 블롯 채널 동일 이미지 재측정 오정정 {w_before}건 → {w_after}건, "
-            f"정상 복호 변동 {ok_delta:+d}건 · exp11b 스위트 2,000 이미지 오정정 "
+            f"CRC 아님)로 봉쇄: 블롯 채널 동일 이미지 재측정 오복호 {w_before}건 → {w_after}건, "
+            f"정상 복호 변동 {ok_delta:+d}건 · exp11b 스위트 2,000 이미지 오복호 "
             f"{b['suite_wrong_total']}건 유지 · 실측 케이스(blot2 trial8) 직접 재현·거부 확인 — "
             f"v11b(기본 on)·v13·공간 소거 스윕 양 경로 활성, exp9~12 기본값 off 동결 "
             f"+ 인코더 LFSR 스크램블(v13 기본 on)")
@@ -881,7 +881,7 @@ def run_exp15():
         f"동일 열화(시드 {summary['seed']}, exp9/exp11b 모델) — 조건 {len(conds)}개 × N={n_cond}",
         f"ECC 오버헤드 비동일(명시): {ecc_line} — 짧은 페이로드에서 D_QR 실효 ECC가 가장 높은 축",
         "검출 비대칭(명시): D_QR만 기하 파라미터 제공 — D_QR 성공률은 검출 비용 제외 상한. "
-        "단 침묵 오정정 지표는 '반환했으면 책임진다' 기준이라 비대칭 무관",
+        "단 미검출 오복호 지표는 '반환했으면 책임진다' 기준이라 비대칭 무관",
         w_line,
         guard_line,
         "지는 구간(정직 고지): 블러 6px에서 DataMatrix 100% vs D_QR 0% — 동일 면적 정규화에서 "
@@ -893,7 +893,7 @@ def run_exp15():
             "(수치: outputs/exp15/exp15_baseline_report.md 실측)",
             all_ok, cols, table_html,
             extra="PASS 기준: 깨끗한 캔버스에서 각 판독기가 동일 59B 페이로드를 정확 반환. "
-                  "표의 성공률·오정정(W)은 조건당 N=100 실측."),
+                  "표의 성공률·오복호(W)은 조건당 N=100 실측."),
     ]
 
 
@@ -911,13 +911,13 @@ EXPS = [
     ("exp9",  "Soft-decision 소거", "밝기 마진 신뢰도 + 소거 사다리 — 국소 오염 복구율 hard 25% → soft 100%.", run_exp9),
     ("exp10", "Dual-grain 점진적 공개", "coarse(6bit·ECC30%)/fine(12bit·ECC20%) 공간 분리 + 신뢰도 게이트 — 좋은 센서일수록 더 깊이 읽힌다.", run_exp10),
     ("exp11", "표 일치율 메트릭 (특허 회피)", "연속 밝기 마진을 이산 표차(vote consensus, N=9)로 교체 — Honeywell FTO 제약 준수.", run_exp11),
-    ("exp11b", "표결 3대 결함 해소", "exp11 중단규칙 3대 결함(만장일치-오류·블러 절벽·errata 재소진)을 공간 소거 스윕·내부 링 폴백·예산 검사로 해소 — 오정정 0 달성 (exp12 방어 계층 통합).", run_exp11b),
+    ("exp11b", "표결 3대 결함 해소", "exp11 중단규칙 3대 결함(만장일치-오류·블러 절벽·errata 재소진)을 공간 소거 스윕·내부 링 폴백·예산 검사로 해소 — 오복호 0 달성 (exp12 방어 계층 통합).", run_exp11b),
     ("exp13", "자기기술 코드", "포맷 링 + 차등 파인더 + 기하 자기추정 — 메타데이터 전무한 PNG만으로 디코딩 (회전·거울상 불변).", run_exp13),
     ("exp14", "홀로그램 CGH 시뮬", "창립 가설 '단일색=홀로그램 호환' 0단계 검증 — binary phase CGH 재생에서 coarse+fine 보존, LED 분산에선 coarse만 생존(점진적 공개 이식), RGB 컬러 코드는 붕괴.", run_exp14),
-    ("exp15", "외부 기준선 비교 + 퇴화 가드", "QR(ECC-H)·DataMatrix(ECC200) 상용 구현과 동일 페이로드·면적·열화로 비교 — 노이즈·국소 오염 우위, 블러 열세 정직 계수. 침묵 오정정 7건(전부-0 퇴화)은 exp15b 4층 가드로 0건 봉쇄.", run_exp15),
-    ("exp16", "검출 파이프라인 v0", "마지막 critical 갭 해소 — 메타데이터·위치정보 0인 임의 배치 PNG에서 파인더 자동 탐지 → 어파인+사영 추정 → 자기기술 디코딩. 회전 0~360°·스케일 0.5~2×·원근 ≤20° 100%, 전 구간 침묵 오정정 0. 검출 모듈은 소거 판정 경로와 아키텍처 분리(FTO).", run_exp16),
-    ("exp17", "물리 카메라 열화 모델", "exp16의 이상적 합성을 넘어 인쇄→촬영 간극을 물리 모델로 근사 — 디포커스·모션·비네팅·글레어·Poisson-Gaussian 노이즈·렌즈왜곡·JPEG·도트게인을 발생 순서로 직렬 적용. 약~중간 열화 강건, 전 구간 침묵 오정정 0. 열화 모듈은 입력 생성 전용(FTO 분리).", run_exp17),
-    ("exp20", "점진적 공개 게이트 FTO 이식", "exp10 dual-grain 게이트가 밝기 마진(Honeywell 침해 메트릭) 의존이던 것을 발견 → 표 일치율 이산 게이트로 이식. 헤드라인 정체성 '좋은 센서일수록 더 깊이 읽힌다'를 exp17 물리 열화 위에서 실증: 클린은 coarse+fine, 디포커스 R8은 coarse만(fine 게이트 차단). 침묵 오정정 0.", run_exp20),
+    ("exp15", "외부 기준선 비교 + 퇴화 가드", "QR(ECC-H)·DataMatrix(ECC200) 상용 구현과 동일 페이로드·면적·열화로 비교 — 노이즈·국소 오염 우위, 블러 열세 정직 계수. 미검출 오복호 7건(전부-0 퇴화)은 exp15b 4층 가드로 0건 봉쇄.", run_exp15),
+    ("exp16", "검출 파이프라인 v0", "마지막 critical 갭 해소 — 메타데이터·위치정보 0인 임의 배치 PNG에서 파인더 자동 탐지 → 어파인+사영 추정 → 자기기술 디코딩. 회전 0~360°·스케일 0.5~2×·원근 ≤20° 100%, 전 구간 미검출 오복호 0. 검출 모듈은 소거 판정 경로와 아키텍처 분리(FTO).", run_exp16),
+    ("exp17", "물리 카메라 열화 모델", "exp16의 이상적 합성을 넘어 인쇄→촬영 간극을 물리 모델로 근사 — 디포커스·모션·비네팅·글레어·Poisson-Gaussian 노이즈·렌즈왜곡·JPEG·도트게인을 발생 순서로 직렬 적용. 약~중간 열화 강건, 전 구간 미검출 오복호 0. 열화 모듈은 입력 생성 전용(FTO 분리).", run_exp17),
+    ("exp20", "점진적 공개 게이트 FTO 이식", "exp10 dual-grain 게이트가 밝기 마진(Honeywell 침해 메트릭) 의존이던 것을 발견 → 표 일치율 이산 게이트로 이식. 헤드라인 정체성 '좋은 센서일수록 더 깊이 읽힌다'를 exp17 물리 열화 위에서 실증: 클린은 coarse+fine, 디포커스 R8은 coarse만(fine 게이트 차단). 미검출 오복호 0.", run_exp20),
 ]
 
 

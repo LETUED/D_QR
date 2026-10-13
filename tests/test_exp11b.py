@@ -6,11 +6,11 @@ exp11b 테스트 — exp11 중단규칙 3대 결함 해소 검증
 ② FTO 불변식: 두 링 패스 모두 바이트 신뢰도가 이산 표 개수인지
 ③ 공간 그룹 불변식: 그룹당 바이트 ≤ (nsym-2)//2, 합집합 = 코드워드 전체
 ④ 결함② 블러 절벽: blur 9.5px에서 v11 실패 / v11b 내부 링 패스로 복구
-⑤ 결함① 클러스터 오염: v11이 실패(A에선 침묵 오정정)하는 군집 오염을
+⑤ 결함① 클러스터 오염: v11이 실패(A에선 미검출 오복호)하는 군집 오염을
    v11b 공간 소거 스윕이 합의 수락으로 정확 복구
 ⑥ 결함③-a 단위: 청크 errata 예산 검사의 경계 동작
 ⑦ 결함③ 통합: exp12 코드워드 시뮬 축소판(N=1000, seed=42 동일 모델)에서
-   1+2층 잔존 오정정 > 0 이지만 v11b 방어는 0
+   1+2층 잔존 오복호 > 0 이지만 v11b 방어는 0
 ⑧ 회귀: 기존 exp9/exp10/exp11 왕복 테스트가 여전히 PASS (서브프로세스)
 """
 import hashlib
@@ -149,7 +149,7 @@ def test_blur_cliff_fixed():
 
 
 def test_cluster_sweep_recovery():
-    """결함①: 군집 오염 — v11 실패/오정정, v11b 공간 스윕 합의 복구."""
+    """결함①: 군집 오염 — v11 실패/오복호, v11b 공간 스윕 합의 복구."""
     ok = True
     for profile in ('A', 'B'):
         data, img, params = make_code(profile)
@@ -234,7 +234,7 @@ def test_codeword_sim_defense():
     ok = wrong['defended'] > 0 and wrong['v11b'] == 0 and correct_v11b > 0
     print(f"[테스트 ⑦] 코드워드 시뮬 축소판 (N={N}): "
           f"{'PASS' if ok else 'FAIL'} "
-          f"(1+2층 오정정={wrong['defended']}, v11b 오정정={wrong['v11b']}, "
+          f"(1+2층 오복호={wrong['defended']}, v11b 오복호={wrong['v11b']}, "
           f"v11b 정상복호={correct_v11b})")
     return ok
 
