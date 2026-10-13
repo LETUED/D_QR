@@ -233,7 +233,7 @@ def report(res, enc_result, total_n, total_silent):
         f"({'0 유지' if total_silent == 0 else '위반!'}) — 검출 실패는 전부 "
         "명시적 예외(DetectionError/ReedSolomonError)",
         "",
-        "## v0 범위 (정직한 한정)",
+        "## v0 범위 (사실대로 한정)",
         "",
         "임의 위치 + 임의 회전(0~360°) + 스케일 0.5~2× + 완만 원근(≤15°) +",
         "균일~약간 잡음 배경, 조명 균일. **범위 밖**: 손촬영, 복잡 배경(텍스처·",

@@ -188,7 +188,7 @@ def finalize():
             break
         remaining = [n for n in N_ESCALATION if n not in complete_ns]
         if not remaining:
-            # 모든 N에서 기준 초과 — 정직 보고 (기본 전환 보류)
+            # 모든 N에서 기준 초과 — 사실대로 보고 (기본 전환 보류)
             # 동률(최대 손실 같음)이면 총 성공률 높은 N 우선
             stop_rule_triggered = True
             best_n = min(complete_ns, key=lambda n: (

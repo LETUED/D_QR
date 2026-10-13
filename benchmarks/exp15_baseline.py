@@ -635,7 +635,7 @@ def finalize():
     make_chart(res, sym_keys, {k: syms[k]['meta'] for k in sym_keys})
     lines, report_path, tot, n_total = make_report(res, sym_keys, syms)
 
-    # 정직한 해석 단락 — 실측에서 D_QR이 지는 구간을 자동 추출해 명시
+    # 사실대로 쓴 해석 단락 — 실측에서 D_QR이 지는 구간을 자동 추출해 명시
     losing = []
     for ch, cfg in CHANNELS.items():
         for lv in cfg['levels']:
@@ -655,13 +655,13 @@ def finalize():
                         f"{100 * dqr_r:.0f}% ({100 * (base_r - dqr_r):.0f}%p "
                         f"열세)")
     lines += [
-        "## D_QR이 지는 구간 (정직 보고)",
+        "## D_QR이 지는 구간 (사실대로 보고)",
         "",
     ]
     lines += (losing if losing
               else ["- 측정 조건에서 10%p 이상 열세 구간 없음 (단, ECC "
                     "오버헤드·검출 비대칭 차이를 감안할 것 — 위 공정성 논의)"])
-    # D_QR 미검출 오복호가 관측되면 조건별 분해를 명시 (정직 보고)
+    # D_QR 미검출 오복호가 관측되면 조건별 분해를 명시 (사실대로 보고)
     dqr_wrong_conds = [
         (ch, lv, res[(ch, lv)]['counts']['dqr']['wrong'])
         for ch, cfg in CHANNELS.items() for lv in cfg['levels']
@@ -670,7 +670,7 @@ def finalize():
     if dqr_wrong_conds:
         lines += [
             "",
-            "## D_QR 미검출 오복호 분석 — 전부-0 코드워드 퇴화 (정직 보고)",
+            "## D_QR 미검출 오복호 분석 — 전부-0 코드워드 퇴화 (사실대로 보고)",
             "",
             "측정에서 D_QR(v11b)에 미검출 오복호가 발생했다: "
             + ", ".join(f"{CHANNELS[ch]['title']} {CHANNELS[ch]['xlabel']}"
@@ -693,7 +693,7 @@ def finalize():
             "이미지에서 파인더가 파괴되어 시도 자체를 거부했지만, D_QR은 "
             "기하 파라미터를 제공받아 거의 빈 심볼을 끝까지 복호했다. "
             "그럼에도 '반환했으면 책임진다' 기준에서 변명이 되지 않으므로 "
-            "오복호로 정직하게 계수한다.",
+            "오복호로 사실대로 집계한다.",
             "",
             "후속 과제(디코더 측, exp15 범위 밖): 전부-0(또는 상수) 코드워드 "
             "거부 규칙. 이는 특정 퇴화 출력에 대한 가드이지 페이로드 "

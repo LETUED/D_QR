@@ -421,7 +421,7 @@ def run_exp11b():
         f"ECC {cap['ecc_rate']*100:.0f}% (nsym={result['nsym']}) — 인코딩은 exp9 그대로, 디코더만 v11b",
         "3자 비교(밝기 마진/표결 v11/v11b): 노이즈 σ135 → 0%/100%/100% · 블러 9.5px → 100%/0%/100%",
         "오복호: 이미지 실측 합계 176/82/0건, 코드워드 시뮬 1만 회 237→84(exp12 방어)→0건 — false reject 0",
-        "잔존 한계(정직 고지): 균일 패치 일치율은 margin 대비 최대 A 28%p / B 44%p 열세 — FTO 1 준수의 구조적 비용",
+        "잔존 한계(사실대로 고지): 균일 패치 일치율은 margin 대비 최대 A 28%p / B 44%p 열세 — FTO 1 준수의 구조적 비용",
     ]
     return metrics, [
         text_demo("텍스트 (exp9 인코더 + v11b 디코더)", STANDARD_BYTES,
@@ -816,7 +816,7 @@ def run_exp15():
             "sub": (f"{m['symbology']} · 특성 {m.get('feature_px', '?')}px · "
                     f"ECC {m.get('ecc_share', '?')}% · {m['reader']}"),
         })
-    for k in ("qr", "dm", "dqr"):     # 기준선 라이브러리 실패도 정직하게 표기
+    for k in ("qr", "dm", "dqr"):     # 기준선 라이브러리 실패도 사실대로 표기
         if k not in syms:
             all_ok = False
             cols.append({"header": SYM_LABELS[k], "file": None, "ok": False,
@@ -884,7 +884,7 @@ def run_exp15():
         "단 미검출 오복호 지표는 '반환했으면 책임진다' 기준이라 비대칭 무관",
         w_line,
         guard_line,
-        "지는 구간(정직 고지): 블러 6px에서 DataMatrix 100% vs D_QR 0% — 동일 면적 정규화에서 "
+        "지는 구간(사실대로 고지): 블러 6px에서 DataMatrix 100% vs D_QR 0% — 동일 면적 정규화에서 "
         "고밀도 기하의 비트당 특성이 가장 작은 데서 오는 구조적 비용 (네이티브 해상도에선 9.5px 생존)",
     ]
     return metrics, [
@@ -914,7 +914,7 @@ EXPS = [
     ("exp11b", "표결 3대 결함 해소", "exp11 중단규칙 3대 결함(만장일치-오류·블러 절벽·errata 재소진)을 공간 소거 스윕·내부 링 폴백·예산 검사로 해소 — 오복호 0 달성 (exp12 방어 계층 통합).", run_exp11b),
     ("exp13", "자기기술 코드", "포맷 링 + 차등 파인더 + 기하 자기추정 — 메타데이터 전무한 PNG만으로 디코딩 (회전·거울상 불변).", run_exp13),
     ("exp14", "홀로그램 CGH 시뮬", "창립 가설 '단일색=홀로그램 호환' 0단계 검증 — binary phase CGH 재생에서 coarse+fine 보존, LED 분산에선 coarse만 생존(점진적 공개 이식), RGB 컬러 코드는 붕괴.", run_exp14),
-    ("exp15", "외부 기준선 비교 + 퇴화 가드", "QR(ECC-H)·DataMatrix(ECC200) 상용 구현과 동일 페이로드·면적·열화로 비교 — 노이즈·국소 오염 우위, 블러 열세 정직 계수. 미검출 오복호 7건(전부-0 퇴화)은 exp15b 4층 가드로 0건 봉쇄.", run_exp15),
+    ("exp15", "외부 기준선 비교 + 퇴화 가드", "QR(ECC-H)·DataMatrix(ECC200) 상용 구현과 동일 페이로드·면적·열화로 비교 — 노이즈·국소 오염 우위, 블러 열세 사실대로 집계. 미검출 오복호 7건(전부-0 퇴화)은 exp15b 4층 가드로 0건 봉쇄.", run_exp15),
     ("exp16", "검출 파이프라인 v0", "마지막 critical 갭 해소 — 메타데이터·위치정보 0인 임의 배치 PNG에서 파인더 자동 탐지 → 어파인+사영 추정 → 자기기술 디코딩. 회전 0~360°·스케일 0.5~2×·원근 ≤20° 100%, 전 구간 미검출 오복호 0. 검출 모듈은 소거 판정 경로와 아키텍처 분리(FTO).", run_exp16),
     ("exp17", "물리 카메라 열화 모델", "exp16의 이상적 합성을 넘어 인쇄→촬영 간극을 물리 모델로 근사 — 디포커스·모션·비네팅·글레어·Poisson-Gaussian 노이즈·렌즈왜곡·JPEG·도트게인을 발생 순서로 직렬 적용. 약~중간 열화 강건, 전 구간 미검출 오복호 0. 열화 모듈은 입력 생성 전용(FTO 분리).", run_exp17),
     ("exp20", "점진적 공개 게이트 FTO 이식", "exp10 dual-grain 게이트가 밝기 마진(Honeywell 침해 메트릭) 의존이던 것을 발견 → 표 일치율 이산 게이트로 이식. 헤드라인 정체성 '좋은 센서일수록 더 깊이 읽힌다'를 exp17 물리 열화 위에서 실증: 클린은 coarse+fine, 디포커스 R8은 coarse만(fine 게이트 차단). 미검출 오복호 0.", run_exp20),
@@ -976,7 +976,7 @@ def esc(s):
 def render_demo_html(d):
     if d.get("error"):
         return (f'<div class="demolabel">{esc(d["label"])}</div>'
-                f'<div class="errbox">실패 사유 (정직 고지): {esc(d["error"])}</div>')
+                f'<div class="errbox">실패 사유 (사실대로 고지): {esc(d["error"])}</div>')
 
     badge = ('<span class="badge pass">PASS</span>' if d["ok"]
              else '<span class="badge fail">FAIL</span>')
@@ -1055,7 +1055,7 @@ def build_html(cards):
     for c in cards:
         body = ""
         if c["error"]:
-            body = f'<div class="errbox">이 실험은 갤러리 빌드 중 실패했습니다 (정직 고지):<br>{esc(c["error"])}</div>'
+            body = f'<div class="errbox">이 실험은 갤러리 빌드 중 실패했습니다 (사실대로 고지):<br>{esc(c["error"])}</div>'
         else:
             body = "".join(f"<li>{esc(m)}</li>" for m in c["metrics"])
             body = f'<ul class="metrics">{body}</ul>'
@@ -1112,7 +1112,7 @@ def main():
                     total_fail += 1
                 print(f"[{exp}] {d['label']}: {status}")
         except Exception:
-            # 한 exp의 실패가 갤러리 전체를 중단시키지 않는다 — 카드에 정직하게 기록
+            # 한 exp의 실패가 갤러리 전체를 중단시키지 않는다 — 카드에 사실대로 기록
             card["error"] = traceback.format_exc(limit=3)
             total_fail += 1
             print(f"[{exp}] 빌드 실패:\n{card['error']}")

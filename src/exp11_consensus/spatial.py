@@ -167,7 +167,7 @@ def spatial_erasure_sweep(codeword: bytes, byte_conf: list, nsym: int,
     오복호 후보 41개는 전원 2e+s ∈ {nsym-1, nsym} 경계대였고, 군집 오염의
     참 후보는 1개 예외 빼고 전부 2e+s ≤ nsym-2 (가설이 오염을 제대로
     덮으면 여력이 남는 게 정상). 경계대 일괄 기각으로 오복호 후보가
-    전멸하고 참 후보는 합의 정족수를 유지한다.
+    모두 걸러지고 참 후보는 합의 정족수를 유지한다.
 
     수락 규칙(합의): 전 가설을 끝까지 시행해 verify·budget을 통과한
     후보들을 복호 데이터별로 집계하고, ⑴ 다중도 ≥ MIN_CONSENSUS,
