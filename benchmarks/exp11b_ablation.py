@@ -334,7 +334,7 @@ def finalize():
         f"{targets['blur']['v11b_9_5']:.0f}% "
         f"(손실 {targets['blur']['loss_at_9_5_pp']:.0f}%p) "
         f"| {mark(targets['blur']['pass'])} |",
-        f"| ④ 코드워드 오복호 일소 | 84 → 한 자릿수 "
+        f"| ④ 코드워드 오복호 제거 | 84 → 한 자릿수 "
         f"| defended {targets['codeword']['defended_wrong']} → v11b "
         f"**{targets['codeword']['v11b_wrong']}** "
         f"| {mark(targets['codeword']['pass'])} |",
@@ -355,8 +355,8 @@ def finalize():
         "",
         "**대신 v11b가 얻은 것:**",
         "",
-        "1. **미검출 오복호 전멸 (이미지+코드워드 양쪽).** 아래 총계표 참조 — "
-        "margin은 전 벤치마크에서 성공 반환의 탈을 쓴 오복호를 "
+        "1. **미검출 오복호 완전 제거 (이미지+코드워드 양쪽).** 아래 총계표 참조 — "
+        "margin은 전 벤치마크에서 성공으로 위장한 오복호를 "
         "대량으로 낸다 (B 노이즈 σ125에서 50회 중 19회!). vote도 패치 "
         "고오염에서 다수 발생. v11b는 전 구간 0건. '성공률' 비교는 이 "
         "비용을 숨기므로 margin의 패치 우위는 액면 그대로 읽으면 안 된다.",
